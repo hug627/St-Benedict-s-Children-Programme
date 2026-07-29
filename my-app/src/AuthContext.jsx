@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { AuthContext } from "./AuthContextValue.js";
 
-// Uses the deployed backend in production and localhost during development.
-const API_URL = `${import.meta.env.VITE_API}/api/auth`;
+// 1. Base API URL (fallback to Render if VITE_API is missing)
+const BASE_URL = import.meta.env.VITE_API || "https://st-benedict-s-children-programme-1.onrender.com";
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -11,7 +12,8 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     async function checkSession() {
       try {
-        const res = await fetch(`${API_URL}/api/auth/me`, {
+        // 2. Fixed path: BASE_URL + /api/auth/me
+        const res = await fetch(`${BASE_URL}/api/auth/me`, {
           method: "GET",
           credentials: "include",
         });
@@ -37,7 +39,8 @@ export function AuthProvider({ children }) {
   // Logout user
   async function logout() {
     try {
-      await fetch(`${API_URL}/api/auth/logout`, {
+      // 3. Fixed path: BASE_URL + /api/auth/logout
+      await fetch(`${BASE_URL}/api/auth/logout`, {
         method: "POST",
         credentials: "include",
       });
