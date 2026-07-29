@@ -5,10 +5,11 @@ import { useGSAP } from "@gsap/react";
 import { useAuth } from "./AuthContextValue.js";
 import "./App.css";
 
-// Your backend's base URL. In production, set this via an env variable
-// (e.g. import.meta.env.VITE_API_URL) instead of hardcoding it.
-const API_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:5000/api/auth";
+// Uses VITE_API_URL or VITE_API, defaulting to your live Render backend URL
+const BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  import.meta.env.VITE_API ||
+  "https://st-benedict-s-children-programme-1.onrender.com";
 
 const FONT_IMPORT = `
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap');
@@ -69,16 +70,26 @@ export default function AuthPage() {
     }
   }, [message]);
 
-  // Small helper: every request includes credentials so the browser
-  // sends/receives the httpOnly auth cookie set by the backend.
-  async function apiRequest(path, body) {
-    const res = await fetch(`${API_URL}${path}`, {
+  // Helper: Every request includes credentials so the browser sends/receives cookies
+  async function apiRequest(endpoint, body) {
+    // Ensures clean URL construction without double slashes or missing /api/auth
+    const cleanBase = BASE_URL.replace(/\/$/, "");
+    const url = `${cleanBase}/api/auth${endpoint}`;
+
+    const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify(body),
     });
-    const data = await res.json();
+
+    let data;
+    try {
+      data = await res.json();
+    } catch {
+      throw new Error("Server error. Please check your network or try again.");
+    }
+
     if (!res.ok) throw new Error(data.message || "Something went wrong.");
     return data;
   }
@@ -90,9 +101,7 @@ export default function AuthPage() {
     try {
       const data = await apiRequest("/login", { email, password });
       setLoggedInUser(data.user);
-      setMessage({ text: `Welcome back, ${data.user.name}!`, type: "success" });
-      // Give Chrome/browser a beat to register the successful form submission
-      // (helps trigger its "Save password?" prompt) before navigating away.
+      setMessage({ text: `Welcome back, ${data.user?.name || "User"}!`, type: "success" });
       setTimeout(() => navigate("/"), 600);
     } catch (err) {
       setMessage({ text: err.message, type: "error" });
@@ -123,7 +132,7 @@ export default function AuthPage() {
     setMessage({ text: "", type: "" });
     try {
       const data = await apiRequest("/forgot-password", { email });
-      setMessage({ text: data.message, type: "success" });
+      setMessage({ text: data.message || "Reset link sent!", type: "success" });
     } catch (err) {
       setMessage({ text: err.message, type: "error" });
     } finally {
@@ -156,7 +165,7 @@ export default function AuthPage() {
       >
         <button
           onClick={() => navigate("/")}
-          className="font-display mb-7 block text-center text-lg font-semibold text-[#2F0F03] transition-opacity hover:opacity-70"
+          className="font-display mb-7 block w-full text-center text-lg font-semibold text-[#2F0F03] transition-opacity hover:opacity-70"
         >
           Company Name
         </button>
@@ -270,7 +279,7 @@ function SubmitButton({ children, loading }) {
     <button
       type="submit"
       disabled={loading}
-      className="mt-2 rounded-full bg-[#FAAA48] py-3 text-sm font-semibold text-[#2F0F03] transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:hover:scale-100"
+      className="mt-2 w-full rounded-full bg-[#FAAA48] py-3 text-sm font-semibold text-[#2F0F03] transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:hover:scale-100"
     >
       {loading ? "Please wait..." : children}
     </button>
