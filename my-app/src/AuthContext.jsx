@@ -1,47 +1,69 @@
 import { useState, useEffect } from "react";
 import { AuthContext } from "./AuthContextValue.js";
 
-const API_URL = "http://localhost:5000/api/auth";
+// Uses the deployed backend in production and localhost during development.
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null); // { id, name, email, role } | null
-  const [loading, setLoading] = useState(true); // true while checking session on first load
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // On first load, ask the backend "am I logged in?" using the httpOnly
-  // cookie that's automatically sent with the request.
+  // Check whether the user is already logged in
   useEffect(() => {
     async function checkSession() {
       try {
-        const res = await fetch(`${API_URL}/me`, { credentials: "include" });
-        if (res.ok) {
-          const data = await res.json();
-          setUser(data.user);
-        } else {
+        const res = await fetch(`${API_URL}/api/auth/me`, {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (!res.ok) {
           setUser(null);
+          return;
         }
-      } catch {
+
+        const data = await res.json();
+        setUser(data.user);
+      } catch (error) {
+        console.error("Session check failed:", error);
         setUser(null);
       } finally {
         setLoading(false);
       }
     }
+
     checkSession();
   }, []);
 
+  // Logout user
   async function logout() {
-    await fetch(`${API_URL}/logout`, { method: "POST", credentials: "include" });
+    try {
+      await fetch(`${API_URL}/api/auth/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+
     setUser(null);
   }
 
-  // Call this after a successful login/signup response from AuthPage,
-  // passing the `user` object the backend returned, so the rest of the
-  // app updates immediately without waiting for another /me request.
+  // Update user after successful login/signup
   function setLoggedInUser(userData) {
     setUser(userData);
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, logout, setLoggedInUser }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        logout,
+        setLoggedInUser,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
