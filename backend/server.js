@@ -7,34 +7,51 @@ import authRoutes from "./routes/auth.js";
 
 const app = express();
 
-// 1. Put CORS first! Allow process.env.CLIENT_URL and trim any potential trailing slash
+// 1. Dynamic CORS setup allowing all Vercel previews & production URLs
 const clientUrl = process.env.CLIENT_URL ? process.env.CLIENT_URL.replace(/\/$/, "") : "";
 
 app.use(
   cors({
-    origin: [clientUrl, "http://localhost:5173", "http://localhost:3000"], // includes local dev fallback
+    origin: (origin, callback) => {
+      // Allow non-browser requests (like Postman or curl)
+      if (!origin) return callback(null, true);
+
+      const isAllowed =
+        origin === clientUrl ||
+        origin.endsWith(".vercel.app") ||
+        origin.includes("st-benedict") ||
+        origin === "http://localhost:5173" ||
+        origin === "http://localhost:3000";
+
+      if (isAllowed) {
+        callback(null, true);
+      } else {
+        callback(new Error("Blocked by CORS policy"));
+      }
+    },
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-// 2. Parsers come after CORS
+// 2. Parsers
 app.use(express.json());
 app.use(cookieParser());
 
-// 3. Root route (fixes "Cannot GET /" when visiting the base URL)
+// 3. Root & Health Routes
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
-
-// 4. API Routes
-app.use("/api/auth", authRoutes);
 
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
 });
 
-// 5. Database Connection & Server Listen
+// 4. API Routes
+app.use("/api/auth", authRoutes);
+
+// 5. Database Connection & Server Startup
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
