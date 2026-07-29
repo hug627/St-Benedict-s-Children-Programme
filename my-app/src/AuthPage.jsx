@@ -7,7 +7,8 @@ import "./App.css";
 
 // Your backend's base URL. In production, set this via an env variable
 // (e.g. import.meta.env.VITE_API_URL) instead of hardcoding it.
-const API_URL = "http://localhost:5000/api/auth";
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000/api/auth";
 
 const FONT_IMPORT = `
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap');
