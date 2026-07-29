@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { AuthContext } from "./AuthContextValue.js";
 
 // Uses the deployed backend in production and localhost during development.
-const API_URL = `${import.meta.env.VITE_API_URL}/api/auth`;
+const API_URL = `${import.meta.env.VITE_API}/api/auth`;
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
