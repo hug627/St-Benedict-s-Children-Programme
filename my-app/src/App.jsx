@@ -6,14 +6,31 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { SplitText } from "gsap/SplitText";
 import { useAuth } from "./AuthContextValue.js";
+import { useTheme } from "./ThemeContextValue.js";
 import "./App.css";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, SplitText);
 
-// Palette
-// --accent : #FAAA48  (orange/gold — buttons, eyebrows, highlights)
-// --light  : #FFDDAC  (light peach — "light" section bg / text on dark bg)
-// --dark   : #2F0F03  (deep brown — "dark" section bg / text on light bg)
+// ============================================================
+// Two distinct palettes. Dark mode is NOT the light palette's
+// "dark" tone reused — it has its own colors, tuned for a
+// near-black background rather than the warm brown/peach look.
+// ============================================================
+const LIGHT_PALETTE = {
+  bgPrimary: "#2F0F03", // "dark" toned sections, header, hero, footer
+  bgSecondary: "#FFDDAC", // "light" toned sections
+  textOnPrimary: "#FFDDAC",
+  textOnSecondary: "#2F0F03",
+  accent: "#FAAA48",
+};
+
+const DARK_PALETTE = {
+  bgPrimary: "#111015", // near-black
+  bgSecondary: "#1C1A22", // slightly lighter charcoal, for section rhythm
+  textOnPrimary: "#F4EFE8", // warm ivory, used on both bg tones in dark mode
+  textOnSecondary: "#F4EFE8",
+  accent: "#FFB454", // brighter amber, tuned to pop against near-black
+};
 
 const NAV_ITEMS = [
   { id: "background", label: "Background" },
@@ -37,6 +54,53 @@ function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
+// Plain inline SVG icons — used instead of emoji/unicode symbols (☰, ✕, ☀️,
+// 🌙) since those can render as blank "tofu" boxes on some mobile browsers
+// depending on the device's installed font/emoji set. SVGs render
+// identically everywhere.
+function MenuIcon({ size = 22, color = "currentColor" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round">
+      <line x1="4" y1="7" x2="20" y2="7" />
+      <line x1="4" y1="12" x2="20" y2="12" />
+      <line x1="4" y1="17" x2="20" y2="17" />
+    </svg>
+  );
+}
+
+function CloseIcon({ size = 22, color = "currentColor" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round">
+      <line x1="5" y1="5" x2="19" y2="19" />
+      <line x1="19" y1="5" x2="5" y2="19" />
+    </svg>
+  );
+}
+
+function SunIcon({ size = 20, color = "currentColor" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round">
+      <circle cx="12" cy="12" r="4" />
+      <line x1="12" y1="2" x2="12" y2="4" />
+      <line x1="12" y1="20" x2="12" y2="22" />
+      <line x1="4.2" y1="4.2" x2="5.6" y2="5.6" />
+      <line x1="18.4" y1="18.4" x2="19.8" y2="19.8" />
+      <line x1="2" y1="12" x2="4" y2="12" />
+      <line x1="20" y1="12" x2="22" y2="12" />
+      <line x1="4.2" y1="19.8" x2="5.6" y2="18.4" />
+      <line x1="18.4" y1="5.6" x2="19.8" y2="4.2" />
+    </svg>
+  );
+}
+
+function MoonIcon({ size = 20, color = "currentColor" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill={color} stroke="none">
+      <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5Z" />
+    </svg>
+  );
+}
+
 /**
  * Section — each one gets its own entrance "personality" via the `direction`
  * prop ("up" | "left" | "right" | "scale"), plus a per-word title reveal
@@ -44,9 +108,10 @@ function prefersReducedMotion() {
  * `listStagger` (for Activities/Values) staggers each <li> individually
  * instead of revealing the list as one block.
  *
- * `tone="dark"` / `tone="light"` use the site palette above. Pass a custom
- * `bgColor` (and optional `textColor`) to override with any one-off hex
- * value instead — useful if a section needs a color outside the palette.
+ * Colors come from the active palette (light or dark mode) via inline
+ * style, based on `tone` ("dark" → bgPrimary, "light" → bgSecondary).
+ * Pass a custom `bgColor` (and optional `textColor`) to override with any
+ * one-off hex value instead, regardless of theme.
  */
 function Section({
   id,
@@ -61,8 +126,14 @@ function Section({
 }) {
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
-  const bg = tone === "dark" ? "bg-[#2F0F03] text-[#FFDDAC]" : "bg-[#FFDDAC] text-[#2F0F03]";
-  const customStyle = bgColor ? { backgroundColor: bgColor, color: textColor || "#FFDDAC" } : undefined;
+  const { darkMode } = useTheme();
+  const palette = darkMode ? DARK_PALETTE : LIGHT_PALETTE;
+
+  const sectionStyle = bgColor
+    ? { backgroundColor: bgColor, color: textColor || palette.textOnPrimary }
+    : tone === "dark"
+    ? { backgroundColor: palette.bgPrimary, color: palette.textOnPrimary }
+    : { backgroundColor: palette.bgSecondary, color: palette.textOnSecondary };
 
   const offsetFor = (dir) => {
     switch (dir) {
@@ -144,18 +215,21 @@ function Section({
         if (split) split.revert();
       };
     },
-    { scope: sectionRef, dependencies: [direction, listStagger] }
+    { scope: sectionRef, dependencies: [direction, listStagger, darkMode] }
   );
 
   return (
     <section
       id={id}
       ref={sectionRef}
-      className={`${customStyle ? "" : bg} font-body scroll-mt-20 px-6 py-20 md:px-16`}
-      style={customStyle}
+      className="font-body scroll-mt-20 px-6 py-20 transition-colors duration-300 md:px-16"
+      style={sectionStyle}
     >
       <div className="mx-auto max-w-3xl">
-        <p className="eyebrow-el mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#FAAA48]">
+        <p
+          className="eyebrow-el mb-3 text-xs font-semibold uppercase tracking-[0.2em]"
+          style={{ color: palette.accent }}
+        >
           {eyebrow}
         </p>
         <h2 ref={titleRef} className="font-display mb-6 text-3xl font-semibold md:text-4xl">
@@ -175,7 +249,12 @@ function Section({
 function Gallery({ id = "gallery", eyebrow = "A glimpse", title = "Gallery", tone = "light", images = [] }) {
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
-  const bg = tone === "dark" ? "bg-[#2F0F03] text-[#FFDDAC]" : "bg-[#FFDDAC] text-[#2F0F03]";
+  const { darkMode } = useTheme();
+  const palette = darkMode ? DARK_PALETTE : LIGHT_PALETTE;
+  const sectionStyle =
+    tone === "dark"
+      ? { backgroundColor: palette.bgPrimary, color: palette.textOnPrimary }
+      : { backgroundColor: palette.bgSecondary, color: palette.textOnSecondary };
 
   useGSAP(
     () => {
@@ -201,13 +280,20 @@ function Gallery({ id = "gallery", eyebrow = "A glimpse", title = "Gallery", ton
         },
       });
     },
-    { scope: sectionRef, dependencies: [images.length] }
+    { scope: sectionRef, dependencies: [images.length, darkMode] }
   );
 
   return (
-    <section id={id} ref={sectionRef} className={`${bg} font-body scroll-mt-20 px-6 py-20 md:px-16`}>
+    <section
+      id={id}
+      ref={sectionRef}
+      className="font-body scroll-mt-20 px-6 py-20 transition-colors duration-300 md:px-16"
+      style={sectionStyle}
+    >
       <div className="mx-auto max-w-5xl">
-        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#FAAA48]">{eyebrow}</p>
+        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: palette.accent }}>
+          {eyebrow}
+        </p>
         <h2 ref={titleRef} className="font-display mb-10 text-3xl font-semibold md:text-4xl">
           {title}
         </h2>
@@ -232,6 +318,8 @@ export default function CompanySite() {
   const heroTitleRef = useRef(null);
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const { darkMode, toggleDarkMode } = useTheme();
+  const palette = darkMode ? DARK_PALETTE : LIGHT_PALETTE;
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const accountMenuRef = useRef(null);
 
@@ -311,21 +399,33 @@ export default function CompanySite() {
   };
 
   return (
-    <div className="font-body">
+    <div className="font-body overflow-x-hidden transition-colors duration-300" style={{ backgroundColor: palette.bgSecondary }}>
       <style>{FONT_IMPORT}</style>
 
       {/* Nav */}
       <header
-        className={`fixed top-0 z-50 w-full transition-colors duration-300 ${
-          scrolled ? "bg-[#2F0F03]/95 backdrop-blur shadow-md" : "bg-transparent"
-        }`}
+        className="fixed top-0 z-50 w-full transition-colors duration-300"
+        style={{
+          backgroundColor: scrolled ? `${palette.bgPrimary}F2` : "transparent",
+          backdropFilter: scrolled ? "blur(6px)" : "none",
+          boxShadow: scrolled ? "0 4px 16px rgba(0,0,0,0.15)" : "none",
+        }}
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-4 md:px-10">
           <button
             onClick={() => scrollTo("home")}
-            className="font-display shrink-0 text-base font-semibold text-[#FFDDAC] md:text-lg"
+            className="font-display shrink-0 text-base font-semibold md:text-lg"
+            style={{ color: palette.textOnPrimary }}
           >
             St Benedict's Children Programme
+          </button>
+
+          <button
+            onClick={toggleDarkMode}
+            aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+            className="hidden shrink-0 rounded-full p-2 text-lg transition-transform hover:scale-110 md:block"
+          >
+            {darkMode ? <SunIcon color={palette.textOnPrimary} /> : <MoonIcon color={palette.textOnPrimary} />}
           </button>
 
           {/* Desktop nav: single "Menu" dropdown instead of a long row of links */}
@@ -334,7 +434,8 @@ export default function CompanySite() {
               onClick={() => setDesktopMenuOpen((v) => !v)}
               aria-haspopup="true"
               aria-expanded={desktopMenuOpen}
-              className="flex items-center gap-1.5 text-sm font-medium text-[#FFDDAC] transition-colors hover:text-[#FAAA48]"
+              className="flex items-center gap-1.5 text-sm font-medium transition-colors"
+              style={{ color: palette.textOnPrimary }}
             >
               Menu
               <span className={`inline-block transition-transform duration-200 ${desktopMenuOpen ? "rotate-180" : ""}`}>
@@ -343,7 +444,10 @@ export default function CompanySite() {
             </button>
 
             {desktopMenuOpen && (
-              <div className="absolute right-0 top-full mt-3 w-52 overflow-hidden rounded-xl bg-[#2F0F03] shadow-xl ring-1 ring-[#FAAA48]/20">
+              <div
+                className="absolute right-0 top-full mt-3 w-52 overflow-hidden rounded-xl shadow-xl ring-1"
+                style={{ backgroundColor: palette.bgPrimary, "--tw-ring-color": `${palette.accent}33` }}
+              >
                 {NAV_ITEMS.map((item) => (
                   <button
                     key={item.id}
@@ -351,7 +455,8 @@ export default function CompanySite() {
                       scrollTo(item.id);
                       setDesktopMenuOpen(false);
                     }}
-                    className="block w-full px-4 py-2.5 text-left text-sm font-medium text-[#FFDDAC] transition-colors hover:bg-[#FAAA48]/10 hover:text-[#FAAA48]"
+                    className="block w-full px-4 py-2.5 text-left text-sm font-medium transition-colors hover:opacity-80"
+                    style={{ color: palette.textOnPrimary }}
                   >
                     {item.label}
                   </button>
@@ -367,20 +472,32 @@ export default function CompanySite() {
                 aria-haspopup="true"
                 aria-expanded={accountMenuOpen}
                 aria-label={`Account menu for ${user.name}`}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-[#FAAA48] text-sm font-semibold text-[#2F0F03] transition-transform hover:scale-105"
+                className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold transition-transform hover:scale-105"
+                style={{ backgroundColor: palette.accent, color: palette.bgPrimary }}
               >
                 {user.name?.charAt(0).toUpperCase() || "U"}
               </button>
 
               {accountMenuOpen && (
-                <div className="absolute right-0 top-full mt-3 w-48 overflow-hidden rounded-xl bg-[#2F0F03] shadow-xl ring-1 ring-[#FAAA48]/20">
-                  <div className="border-b border-[#FAAA48]/20 px-4 py-3">
-                    <p className="truncate text-sm font-semibold text-[#FFDDAC]">{user.name}</p>
-                    <p className="truncate text-xs text-[#FFDDAC]/60">{user.email}</p>
+                <div
+                  className="absolute right-0 top-full mt-3 w-48 overflow-hidden rounded-xl shadow-xl ring-1"
+                  style={{ backgroundColor: palette.bgPrimary, "--tw-ring-color": `${palette.accent}33` }}
+                >
+                  <div
+                    className="border-b px-4 py-3"
+                    style={{ borderColor: `${palette.accent}33` }}
+                  >
+                    <p className="truncate text-sm font-semibold" style={{ color: palette.textOnPrimary }}>
+                      {user.name}
+                    </p>
+                    <p className="truncate text-xs opacity-60" style={{ color: palette.textOnPrimary }}>
+                      {user.email}
+                    </p>
                   </div>
                   <button
                     onClick={handleLogout}
-                    className="block w-full px-4 py-2.5 text-left text-sm font-medium text-[#FFDDAC] transition-colors hover:bg-[#FAAA48]/10 hover:text-[#FAAA48]"
+                    className="block w-full px-4 py-2.5 text-left text-sm font-medium transition-colors hover:opacity-80"
+                    style={{ color: palette.textOnPrimary }}
                   >
                     Log Out
                   </button>
@@ -390,46 +507,63 @@ export default function CompanySite() {
           ) : (
             <button
               onClick={() => navigate("/auth")}
-              className="hidden shrink-0 rounded-full bg-[#FAAA48] px-5 py-2 text-sm font-semibold text-[#2F0F03] transition-transform hover:scale-105 md:block"
+              className="hidden shrink-0 rounded-full px-5 py-2 text-sm font-semibold transition-transform hover:scale-105 md:block"
+              style={{ backgroundColor: palette.accent, color: palette.bgPrimary }}
             >
               Log In
             </button>
           )}
 
           <button
-            className="text-2xl text-[#FFDDAC] md:hidden"
+            className="flex items-center justify-center md:hidden"
             onClick={() => setMenuOpen((v) => !v)}
             aria-label="Toggle menu"
             aria-expanded={menuOpen}
             aria-controls="mobile-nav"
+            style={{ color: palette.textOnPrimary }}
           >
-            {menuOpen ? "✕" : "☰"}
+            {menuOpen ? <CloseIcon /> : <MenuIcon />}
           </button>
         </div>
 
         <nav
           id="mobile-nav"
-          className={`grid overflow-hidden bg-[#2F0F03] transition-[grid-template-rows] duration-300 ease-in-out md:hidden ${
+          className={`grid overflow-hidden transition-[grid-template-rows] duration-300 ease-in-out md:hidden ${
             menuOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
           }`}
+          style={{ backgroundColor: palette.bgPrimary }}
         >
           <div className="flex flex-col gap-1 overflow-hidden px-6 pb-4">
             {NAV_ITEMS.map((item) => (
               <button
                 key={item.id}
                 onClick={() => scrollTo(item.id)}
-                className="py-2 text-left text-sm font-medium text-[#FFDDAC] hover:text-[#FAAA48]"
+                className="py-2 text-left text-sm font-medium transition-colors"
+                style={{ color: palette.textOnPrimary }}
               >
                 {item.label}
               </button>
             ))}
-            <div className="mt-2 border-t border-[#FAAA48]/20 pt-2">
+            <div className="mt-2 border-t pt-2" style={{ borderColor: `${palette.accent}33` }}>
+              <button
+                onClick={toggleDarkMode}
+                className="flex items-center gap-2 py-2 text-left text-sm font-medium"
+                style={{ color: palette.textOnPrimary }}
+              >
+                <span className="flex items-center">
+                  {darkMode ? <SunIcon size={18} /> : <MoonIcon size={18} />}
+                </span>
+                {darkMode ? "Light mode" : "Dark mode"}
+              </button>
               {user ? (
                 <>
-                  <p className="truncate py-1 text-xs text-[#FFDDAC]/60">{user.email}</p>
+                  <p className="truncate py-1 text-xs opacity-60" style={{ color: palette.textOnPrimary }}>
+                    {user.email}
+                  </p>
                   <button
                     onClick={handleLogout}
-                    className="py-2 text-left text-sm font-medium text-[#FFDDAC] hover:text-[#FAAA48]"
+                    className="py-2 text-left text-sm font-medium"
+                    style={{ color: palette.textOnPrimary }}
                   >
                     Log Out
                   </button>
@@ -440,7 +574,8 @@ export default function CompanySite() {
                     setMenuOpen(false);
                     navigate("/auth");
                   }}
-                  className="mt-1 w-fit rounded-full bg-[#FAAA48] px-5 py-2 text-sm font-semibold text-[#2F0F03]"
+                  className="mt-1 w-fit rounded-full px-5 py-2 text-sm font-semibold"
+                  style={{ backgroundColor: palette.accent, color: palette.bgPrimary }}
                 >
                   Log In
                 </button>
@@ -453,10 +588,16 @@ export default function CompanySite() {
       {/* Hero */}
       <section
         id="home"
-        className="hero-bg relative flex min-h-screen flex-col justify-center px-6 pt-24 text-[#FFDDAC] md:px-16"
+        className="hero-bg relative flex min-h-screen flex-col justify-center px-6 pt-24 md:px-16"
+        style={{ color: palette.textOnPrimary }}
       >
         <div className="relative" ref={heroRef}>
-          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.3em] text-[#FAAA48]">Welcome</p>
+          <p
+            className="mb-4 text-xs font-semibold uppercase tracking-[0.3em]"
+            style={{ color: palette.accent }}
+          >
+            Welcome
+          </p>
           <h1 ref={heroTitleRef} className="font-display max-w-2xl text-4xl font-semibold leading-tight md:text-6xl">
             St Benedict's Children Programme
           </h1>
@@ -465,7 +606,8 @@ export default function CompanySite() {
           </p>
           <button
             onClick={() => scrollTo("background")}
-            className="mt-10 w-fit rounded-full bg-[#FAAA48] px-6 py-3 text-sm font-semibold text-[#2F0F03] transition-transform hover:scale-105"
+            className="mt-10 w-fit rounded-full px-6 py-3 text-sm font-semibold transition-transform hover:scale-105"
+            style={{ backgroundColor: palette.accent, color: palette.bgPrimary }}
           >
             Learn more
           </button>
@@ -552,7 +694,7 @@ export default function CompanySite() {
       </Section>
 
       <Section id="values" eyebrow="What we believe in" title="Core Values" tone="dark" direction="left" listStagger>
-        <ul className="list-disc space-y-3 pl-5 marker:text-[#FAAA48]">
+        <ul className="list-disc space-y-3 pl-5">
           {[
             "Moral Values",
             "Mutual Understanding",
@@ -566,7 +708,7 @@ export default function CompanySite() {
             "Communication",
             "Respect",
           ].map((value) => (
-            <li key={value} className="text-base font-medium text-[#FFDDAC] md:text-lg">
+            <li key={value} className="text-base font-medium md:text-lg">
               {value}
             </li>
           ))}
@@ -588,24 +730,31 @@ export default function CompanySite() {
         ]}
       />
 
-      <footer className="bg-[#2F0F03] px-6 py-10 text-[#FFDDAC] md:px-16">
+      <footer
+        className="px-6 py-10 transition-colors duration-300 md:px-16"
+        style={{ backgroundColor: palette.bgPrimary, color: palette.textOnPrimary }}
+      >
         <div className="mx-auto max-w-3xl space-y-6 text-center">
           <div className="space-y-1">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FAAA48]">Get in touch</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: palette.accent }}>
+              Get in touch
+            </p>
             <p className="text-sm">
-              <a href="mailto:st.benedict.c.p@gmail.com" className="hover:text-[#FAAA48]">
+              <a href="mailto:st.benedict.c.p@gmail.com" className="hover:opacity-80">
                 st.benedict.c.p@gmail.com
               </a>
             </p>
             <p className="text-sm">
-              <a href="mailto:vincentonsongo72@gmail.com" className="hover:text-[#FAAA48]">
+              <a href="mailto:vincentonsongo72@gmail.com" className="hover:opacity-80">
                 vincentonsongo72@gmail.com
               </a>
             </p>
           </div>
 
           <div className="space-y-1">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FAAA48]">Support the programme</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: palette.accent }}>
+              Support the programme
+            </p>
             <p className="text-sm"> Mpesa Paybill: 303030</p>
             <p className="text-sm">Bank Account: 0671410505</p>
           </div>
