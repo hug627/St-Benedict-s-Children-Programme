@@ -513,8 +513,7 @@ export default function CompanySite() {
 
       <Section id="location" eyebrow="Where we are" title="Location" tone="dark" direction="left">
         <p>
-          St Benedict's children center is located at Mathare North Area 2, Near the Mathare North, Nairobi City Council
-          Social Hall.
+          St Benedict's children center is located at Mathare North Area 2, Near the Mathare North Primary School/Mathare North Market
         </p>
       </Section>
 
@@ -542,7 +541,7 @@ export default function CompanySite() {
         </p>
       </Section>
 
-      <Section id="aims" eyebrow="What we're reaching for" title="Aims And Objectives of the SBCD" tone="dark" direction="right">
+      <Section id="aims" eyebrow="What we're reaching for" title="Aims And Objectives of the St.Benedict's Children Centre (SBCC)" tone="dark" direction="right">
         <p>
           St.Benedict's children programme is a church based initiative that provides a strong foundation for children
           within context of the family and the community to become responsible and self reliant.
@@ -551,15 +550,14 @@ export default function CompanySite() {
 
       <Section id="activities" eyebrow="What we do" title="Activities" tone="light" direction="up" listStagger>
         <ul className="list-disc space-y-2 pl-5">
-          <li>Making contact with and recruiting children</li>
+          <li>Making contact with children families, referral process and recruiting children</li>
           <li>Day care center and non formal primary education</li>
           <li>Recreational (Art, Music, Sports, Story telling and Poems)</li>
-          <li>Counselling and instilling</li>
+          <li>Counselling and guidance </li>
           <li>Christian Morals and values integration of the children with their family and the community</li>
           <li>Aiding the family in placing their children into educational institution or vocational outreach</li>
           <li>Home visits, school visit and follow-ups</li>
           <li>Medical Care</li>
-          <li>Provision of family life education in both families and schools</li>
           <li>Workshops & children trainings</li>
           <li>Parents meeting & empowerment</li>
           <li>Feeding Programme</li>
@@ -629,7 +627,7 @@ export default function CompanySite() {
           <div className="space-y-1">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FAAA48]">Support the programme</p>
             <p className="text-sm"> Mpesa Paybill: 303030</p>
-            <p className="text-sm">Bank Account: 0671410505</p>
+            <p className="text-sm">ABSA Bank Account: 0671410505</p>
           </div>
 
           <p className="text-xs opacity-70">
