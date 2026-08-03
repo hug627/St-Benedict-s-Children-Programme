@@ -483,7 +483,7 @@ export default function CompanySite() {
             St Benedict's Children Programme
           </h1>
           <p className="mt-6 max-w-xl font-body text-base opacity-80 sm:text-lg">
-            A one-line description of what the company does goes here — replace with your real tagline.
+             It's a boy street children rehabilitation center 
           </p>
           <button
             onClick={() => scrollTo("background")}
@@ -599,12 +599,12 @@ export default function CompanySite() {
         title="Gallery"
         tone="light"
         images={[
-          { src: "/image1.jpg", alt: "Programme photo 1" },
-          { src: "/image2.jpg", alt: "Programme photo 2" },
-          { src: "/image3.jpg", alt: "Programme photo 3" },
-          { src: "/image4.jpg", alt: "Programme photo 4" },
-          { src: "/image5.jpg", alt: "Programme photo 5" },
-          { src: "/image6.jpg", alt: "Programme photo 6" },
+          { src: "/img_2256.jpeg", alt: "Programme photo 1" },
+          { src: "/img__2261.jpeg", alt: "Programme photo 2" },
+          { src: "/img.jpeg", alt: "Programme photo 3" },
+          { src: "/img_2379.jpeg", alt: "Programme photo 4" },
+          { src: "/img_2381.jpeg", alt: "Programme photo 5" },
+          { src: "/img_4452.jpeg", alt: "Programme photo 6" },
         ]}
       />
 
