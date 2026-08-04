@@ -1,16 +1,22 @@
 import nodemailer from "nodemailer";
 
+// Use explicit host/port settings to prevent Render SMTP connection timeouts
 const transporter = nodemailer.createTransport({
-  service: process.env.EMAIL_SERVICE || "gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true, // true for port 465 (SSL)
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+  // Prevents serverless/cloud instances from hanging on open sockets
+  pool: false,
+  connectionTimeout: 10000, // 10 seconds timeout
 });
 
 export async function sendPasswordResetEmail(toEmail, resetLink) {
   try {
-    console.log(`Sending password reset email to ${toEmail}`);
+    console.log(`Attempting to send reset email to: ${toEmail}`);
 
     const info = await transporter.sendMail({
       from: `"St Benedict's Children Programme" <${process.env.EMAIL_USER}>`,
@@ -46,12 +52,10 @@ export async function sendPasswordResetEmail(toEmail, resetLink) {
       `,
     });
 
-    console.log("✅ Email sent successfully!");
-    console.log(info.response);
+    console.log("✅ Email sent successfully:", info.response);
     return info;
   } catch (err) {
-    console.error("❌ Failed to send email:");
-    console.error(err);
+    console.error("❌ Failed to send email during password reset:", err);
     throw err;
   }
 }
