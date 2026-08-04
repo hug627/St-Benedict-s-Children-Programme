@@ -7,33 +7,36 @@ import authRoutes from "./routes/auth.js";
 
 const app = express();
 
-// 1. Dynamic CORS setup allowing all Vercel previews & production URLs
+// 1. Dynamic CORS setup allowing Vercel frontends & local environments
 const clientUrl = process.env.CLIENT_URL ? process.env.CLIENT_URL.replace(/\/$/, "") : "";
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      // Allow non-browser requests (like Postman or curl)
-      if (!origin) return callback(null, true);
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow non-browser requests (Postman, curl, server-to-server)
+    if (!origin) return callback(null, true);
 
-      const isAllowed =
-        origin === clientUrl ||
-        origin.endsWith(".vercel.app") ||
-        origin.includes("st-benedict") ||
-        origin === "http://localhost:5173" ||
-        origin === "http://localhost:3000";
+    const isAllowed =
+      (clientUrl && origin === clientUrl) ||
+      origin.endsWith(".vercel.app") ||
+      origin.includes("st-benedict") ||
+      origin === "http://localhost:5173" ||
+      origin === "http://localhost:3000";
 
-      if (isAllowed) {
-        callback(null, true);
-      } else {
-        callback(new Error("Blocked by CORS policy"));
-      }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      console.warn(`Blocked by CORS: ${origin}`);
+      callback(new Error("Blocked by CORS policy"));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+// Enable CORS for all routes and handle preflight OPTIONS requests
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 // 2. Parsers
 app.use(express.json());
