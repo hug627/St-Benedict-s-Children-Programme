@@ -1,17 +1,18 @@
 import nodemailer from "nodemailer";
 
-// Use explicit host/port settings to prevent Render SMTP connection timeouts
+// Use Port 587 with STARTTLS to prevent Render outbound timeouts
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 465,
-  secure: true, // true for port 465 (SSL)
+  port: 587,
+  secure: false, // Must be false for port 587
+  requireTLS: true,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
-  // Prevents serverless/cloud instances from hanging on open sockets
-  pool: false,
-  connectionTimeout: 10000, // 10 seconds timeout
+  tls: {
+    rejectUnauthorized: false, // Prevents self-signed certificate blocking on cloud hosts
+  },
 });
 
 export async function sendPasswordResetEmail(toEmail, resetLink) {
