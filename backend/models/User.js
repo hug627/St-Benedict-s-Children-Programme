@@ -18,4 +18,7 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("User", userSchema);
+// Check if model exists before compiling to prevent OverwriteModelError crashes
+const User = mongoose.models.User || mongoose.model("User", userSchema);
+
+export default User;
