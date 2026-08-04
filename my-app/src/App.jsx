@@ -57,7 +57,7 @@ function CloseIcon({ size = 22, color = "currentColor" }) {
 }
 
 /**
- * Section Component — with responsive image support and GSAP scroll animations.
+ * Section Component — with responsive compact image support and GSAP scroll animations.
  */
 function Section({
   id,
@@ -183,7 +183,7 @@ function Section({
       className={`${customStyle ? "" : bg} font-body scroll-mt-20 px-6 py-20 md:px-16`}
       style={customStyle}
     >
-      <div className={`mx-auto max-w-6xl ${image ? "grid items-center gap-10 md:grid-cols-2 md:gap-14" : "max-w-3xl"}`}>
+      <div className={`mx-auto max-w-6xl ${image ? "grid items-center gap-8 md:grid-cols-2 md:gap-12" : "max-w-3xl"}`}>
         
         {/* Content Box */}
         <div className={image && imagePos === "left" ? "md:order-2" : "md:order-1"}>
@@ -196,14 +196,14 @@ function Section({
           <div className="animate-in space-y-4 text-base leading-relaxed opacity-90 md:text-lg">{children}</div>
         </div>
 
-        {/* Section Image */}
+        {/* Section Image - Compact Sizing */}
         {image && (
-          <div className={`section-img ${imagePos === "left" ? "md:order-1" : "md:order-2"}`} ref={imgRef}>
-            <div className="overflow-hidden rounded-2xl shadow-xl ring-1 ring-[#FAAA48]/20">
+          <div className={`section-img w-full max-w-md justify-self-center ${imagePos === "left" ? "md:order-1" : "md:order-2"}`} ref={imgRef}>
+            <div className="overflow-hidden rounded-xl shadow-lg ring-1 ring-[#FAAA48]/20">
               <img
                 src={image.src}
                 alt={image.alt || ""}
-                className="h-64 w-full object-cover transition-transform duration-500 hover:scale-105 sm:h-80 md:h-96"
+                className="h-48 w-full object-cover transition-transform duration-500 hover:scale-105 sm:h-60 md:h-72"
               />
             </div>
           </div>
@@ -253,9 +253,10 @@ function Gallery({ id = "gallery", eyebrow = "A glimpse", title = "Gallery", ton
         <h2 ref={titleRef} className="font-display mb-10 text-3xl font-semibold md:text-4xl">
           {title}
         </h2>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-6">
+        {/* Gallery Grid - Reduced tile sizes */}
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 md:gap-4">
           {images.map((img, i) => (
-            <div key={i} className="gallery-img aspect-square overflow-hidden rounded-2xl shadow-lg">
+            <div key={i} className="gallery-img aspect-square overflow-hidden rounded-xl shadow-md">
               <img src={img.src} alt={img.alt || ""} className="h-full w-full object-cover" />
             </div>
           ))}
