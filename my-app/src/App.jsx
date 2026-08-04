@@ -520,11 +520,6 @@ export default function CompanySite() {
         title="Historical Background"
         tone="light"
         direction="up"
-        image={{
-          src: "/img_2256.jpeg", // Replace with your image name
-          alt: "Historical background photo",
-          position: "right",
-        }}
       >
         <p>
           St.Benedict's children programme is brain child of Kolping family and St.Benedict's Catholic Parish Ruaraka.
@@ -557,7 +552,7 @@ export default function CompanySite() {
         tone="light"
         direction="scale"
         image={{
-          src: "/img__2261.jpeg", // Replace with your image name
+          src: "/img__2261.jpeg",
           alt: "Vision image",
           position: "left",
         }}
@@ -573,7 +568,7 @@ export default function CompanySite() {
         tone="dark"
         direction="right"
         image={{
-          src: "/img.jpeg", // Replace with your image name
+          src: "/img.jpeg",
           alt: "Mission image",
           position: "right",
         }}
@@ -598,7 +593,7 @@ export default function CompanySite() {
         tone="light"
         direction="left"
         image={{
-          src: "/img_2379.jpeg", // Replace with your image name
+          src: "/img_2379.jpeg",
           alt: "Objectives image",
           position: "left",
         }}
@@ -617,7 +612,7 @@ export default function CompanySite() {
         tone="dark"
         direction="right"
         image={{
-          src: "/img_2381.jpeg", // Replace with your image name
+          src: "/img_2381.jpeg",
           alt: "Aims image",
           position: "right",
         }}
@@ -637,7 +632,7 @@ export default function CompanySite() {
         direction="up"
         listStagger
         image={{
-          src: "/img_4452.jpeg", // Replace with your image name
+          src: "/img_4452.jpeg",
           alt: "Activities image",
           position: "left",
         }}
