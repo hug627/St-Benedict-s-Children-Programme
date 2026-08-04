@@ -37,9 +37,6 @@ function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-// Plain inline SVG icons — render identically on every device regardless of
-// installed fonts/emoji sets (unlike ☰ / ✕ text characters, which can show
-// as blank boxes on some phones).
 function MenuIcon({ size = 22, color = "currentColor" }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round">
@@ -60,15 +57,7 @@ function CloseIcon({ size = 22, color = "currentColor" }) {
 }
 
 /**
- * Section — each one gets its own entrance "personality" via the `direction`
- * prop ("up" | "left" | "right" | "scale"), plus a per-word title reveal
- * using SplitText and a scroll-synced reveal using ScrollTrigger.
- * `listStagger` (for Activities/Values) staggers each <li> individually
- * instead of revealing the list as one block.
- *
- * `tone="dark"` / `tone="light"` use the site palette above. Pass a custom
- * `bgColor` (and optional `textColor`) to override with any one-off hex
- * value instead — useful if a section needs a color outside the palette.
+ * Section Component — with responsive image support and GSAP scroll animations.
  */
 function Section({
   id,
@@ -80,11 +69,15 @@ function Section({
   listStagger = false,
   bgColor,
   textColor,
+  image, // Optional: { src: string, alt: string, position?: "left" | "right" }
 }) {
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
+  const imgRef = useRef(null);
   const bg = tone === "dark" ? "bg-[#2F0F03] text-[#FFDDAC]" : "bg-[#FFDDAC] text-[#2F0F03]";
   const customStyle = bgColor ? { backgroundColor: bgColor, color: textColor || "#FFDDAC" } : undefined;
+
+  const imagePos = image?.position || "right";
 
   const offsetFor = (dir) => {
     switch (dir) {
@@ -102,7 +95,7 @@ function Section({
   useGSAP(
     () => {
       if (prefersReducedMotion()) {
-        gsap.set(sectionRef.current.querySelectorAll(".animate-in, .animate-in li"), {
+        gsap.set(sectionRef.current.querySelectorAll(".animate-in, .animate-in li, .section-img"), {
           opacity: 1,
           x: 0,
           y: 0,
@@ -162,11 +155,25 @@ function Section({
         "-=0.3"
       );
 
+      if (imgRef.current) {
+        tl.from(
+          imgRef.current,
+          {
+            opacity: 0,
+            scale: 0.85,
+            x: imagePos === "right" ? 40 : -40,
+            duration: 0.8,
+            ease: "back.out(1.4)",
+          },
+          "-=0.5"
+        );
+      }
+
       return () => {
         if (split) split.revert();
       };
     },
-    { scope: sectionRef, dependencies: [direction, listStagger] }
+    { scope: sectionRef, dependencies: [direction, listStagger, imagePos] }
   );
 
   return (
@@ -176,24 +183,37 @@ function Section({
       className={`${customStyle ? "" : bg} font-body scroll-mt-20 px-6 py-20 md:px-16`}
       style={customStyle}
     >
-      <div className="mx-auto max-w-3xl">
-        <p className="eyebrow-el mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#FAAA48]">
-          {eyebrow}
-        </p>
-        <h2 ref={titleRef} className="font-display mb-6 text-3xl font-semibold md:text-4xl">
-          {title}
-        </h2>
-        <div className="animate-in space-y-4 text-base leading-relaxed opacity-90 md:text-lg">{children}</div>
+      <div className={`mx-auto max-w-6xl ${image ? "grid items-center gap-10 md:grid-cols-2 md:gap-14" : "max-w-3xl"}`}>
+        
+        {/* Content Box */}
+        <div className={image && imagePos === "left" ? "md:order-2" : "md:order-1"}>
+          <p className="eyebrow-el mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#FAAA48]">
+            {eyebrow}
+          </p>
+          <h2 ref={titleRef} className="font-display mb-6 text-3xl font-semibold md:text-4xl">
+            {title}
+          </h2>
+          <div className="animate-in space-y-4 text-base leading-relaxed opacity-90 md:text-lg">{children}</div>
+        </div>
+
+        {/* Section Image */}
+        {image && (
+          <div className={`section-img ${imagePos === "left" ? "md:order-1" : "md:order-2"}`} ref={imgRef}>
+            <div className="overflow-hidden rounded-2xl shadow-xl ring-1 ring-[#FAAA48]/20">
+              <img
+                src={image.src}
+                alt={image.alt || ""}
+                className="h-64 w-full object-cover transition-transform duration-500 hover:scale-105 sm:h-80 md:h-96"
+              />
+            </div>
+          </div>
+        )}
+
       </div>
     </section>
   );
 }
 
-/**
- * Gallery — a grid of photos that each spin in as you scroll to them.
- * Pass an array of { src, alt } objects. Put actual image files in your
- * project's public/ folder and reference them here as "/your-file.jpg".
- */
 function Gallery({ id = "gallery", eyebrow = "A glimpse", title = "Gallery", tone = "light", images = [] }) {
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
@@ -350,7 +370,6 @@ export default function CompanySite() {
             St Benedict's Children Programme
           </button>
 
-          {/* Desktop nav: single "Menu" dropdown instead of a long row of links */}
           <div ref={desktopMenuRef} className="relative hidden shrink-0 md:block">
             <button
               onClick={() => setDesktopMenuOpen((v) => !v)}
@@ -494,7 +513,19 @@ export default function CompanySite() {
         </div>
       </section>
 
-      <Section id="background" eyebrow="Who we are" title="Historical Background" tone="light" direction="up">
+      {/* Historical Background */}
+      <Section
+        id="background"
+        eyebrow="Who we are"
+        title="Historical Background"
+        tone="light"
+        direction="up"
+        image={{
+          src: "/img_2256.jpeg", // Replace with your image name
+          alt: "Historical background photo",
+          position: "right",
+        }}
+      >
         <p>
           St.Benedict's children programme is brain child of Kolping family and St.Benedict's Catholic Parish Ruaraka.
           The concept of it's formation can be traced back to 1993. During that year a group of foresighted individuals led by
@@ -511,17 +542,42 @@ export default function CompanySite() {
         </p>
       </Section>
 
+      {/* Location */}
       <Section id="location" eyebrow="Where we are" title="Location" tone="dark" direction="left">
         <p>
           St Benedict's children center is located at Mathare North Area 2, Near the Mathare North Primary School/Mathare North Market
         </p>
       </Section>
 
-      <Section id="vision" eyebrow="Looking ahead" title="Vision Statement" tone="light" direction="scale">
+      {/* Vision Statement */}
+      <Section
+        id="vision"
+        eyebrow="Looking ahead"
+        title="Vision Statement"
+        tone="light"
+        direction="scale"
+        image={{
+          src: "/img__2261.jpeg", // Replace with your image name
+          alt: "Vision image",
+          position: "left",
+        }}
+      >
         <p>A stable, responsible and morally upright child in the society.</p>
       </Section>
 
-      <Section id="mission" eyebrow="Why we exist" title="Mission Statement" tone="dark" direction="right">
+      {/* Mission Statement */}
+      <Section
+        id="mission"
+        eyebrow="Why we exist"
+        title="Mission Statement"
+        tone="dark"
+        direction="right"
+        image={{
+          src: "/img.jpeg", // Replace with your image name
+          alt: "Mission image",
+          position: "right",
+        }}
+      >
         <p>
           St.Benedict's Children Programme is a church based initiative that provides a strong foundation for the children
           within the context of the family and community to education become self reliant and responsible by involving the
@@ -534,21 +590,58 @@ export default function CompanySite() {
         </ul>
       </Section>
 
-      <Section id="objectives" eyebrow="What we're working toward" title="Programme Objectives" tone="light" direction="left">
+      {/* Programme Objectives */}
+      <Section
+        id="objectives"
+        eyebrow="What we're working toward"
+        title="Programme Objectives"
+        tone="light"
+        direction="left"
+        image={{
+          src: "/img_2379.jpeg", // Replace with your image name
+          alt: "Objectives image",
+          position: "left",
+        }}
+      >
         <p>
           To provide a basis for new life for street children and other under privileged children, a healthy home,
           parental care, schooling, food and primary health care (etc).
         </p>
       </Section>
 
-      <Section id="aims" eyebrow="What we're reaching for" title="Aims And Objectives of the St.Benedict's Children Centre (SBCC)" tone="dark" direction="right">
+      {/* Aims and Objectives */}
+      <Section
+        id="aims"
+        eyebrow="What we're reaching for"
+        title="Aims And Objectives of the St.Benedict's Children Centre (SBCC)"
+        tone="dark"
+        direction="right"
+        image={{
+          src: "/img_2381.jpeg", // Replace with your image name
+          alt: "Aims image",
+          position: "right",
+        }}
+      >
         <p>
           St.Benedict's children programme is a church based initiative that provides a strong foundation for children
           within context of the family and the community to become responsible and self reliant.
         </p>
       </Section>
 
-      <Section id="activities" eyebrow="What we do" title="Activities" tone="light" direction="up" listStagger>
+      {/* Activities */}
+      <Section
+        id="activities"
+        eyebrow="What we do"
+        title="Activities"
+        tone="light"
+        direction="up"
+        listStagger
+        image={{
+          src: "/img_4452.jpeg", // Replace with your image name
+          alt: "Activities image",
+          position: "left",
+        }}
+      >
         <ul className="list-disc space-y-2 pl-5">
           <li>Making contact with children families, referral process and recruiting children</li>
           <li>Day care center and non formal primary education</li>
@@ -571,6 +664,7 @@ export default function CompanySite() {
         </ul>
       </Section>
 
+      {/* Core Values */}
       <Section id="values" eyebrow="What we believe in" title="Core Values" tone="dark" direction="left" listStagger>
         <ul className="list-disc space-y-3 pl-5 marker:text-[#FAAA48]">
           {[
@@ -593,6 +687,7 @@ export default function CompanySite() {
         </ul>
       </Section>
 
+      {/* Gallery */}
       <Gallery
         id="gallery"
         eyebrow="A glimpse"
