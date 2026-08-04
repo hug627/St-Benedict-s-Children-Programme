@@ -57,7 +57,7 @@ function CloseIcon({ size = 22, color = "currentColor" }) {
 }
 
 /**
- * Section Component — with responsive compact image support and GSAP scroll animations.
+ * Section Component — with single/multiple responsive image support and GSAP scroll animations.
  */
 function Section({
   id,
@@ -69,7 +69,9 @@ function Section({
   listStagger = false,
   bgColor,
   textColor,
-  image, // Optional: { src: string, alt: string, position?: "left" | "right" }
+  image, // Single image: { src: string, alt: string, position?: "left" | "right" }
+  images, // Array of images: [{ src: string, alt: string }], position?: "left" | "right"
+  imagePosition = "right",
 }) {
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
@@ -77,7 +79,9 @@ function Section({
   const bg = tone === "dark" ? "bg-[#2F0F03] text-[#FFDDAC]" : "bg-[#FFDDAC] text-[#2F0F03]";
   const customStyle = bgColor ? { backgroundColor: bgColor, color: textColor || "#FFDDAC" } : undefined;
 
-  const imagePos = image?.position || "right";
+  // Resolve position and image array
+  const activePosition = image?.position || imagePosition;
+  const imageList = images || (image ? [image] : []);
 
   const offsetFor = (dir) => {
     switch (dir) {
@@ -95,7 +99,7 @@ function Section({
   useGSAP(
     () => {
       if (prefersReducedMotion()) {
-        gsap.set(sectionRef.current.querySelectorAll(".animate-in, .animate-in li, .section-img"), {
+        gsap.set(sectionRef.current.querySelectorAll(".animate-in, .animate-in li, .section-img-item"), {
           opacity: 1,
           x: 0,
           y: 0,
@@ -155,14 +159,16 @@ function Section({
         "-=0.3"
       );
 
-      if (imgRef.current) {
+      const imgTargets = sectionRef.current.querySelectorAll(".section-img-item");
+      if (imgTargets.length > 0) {
         tl.from(
-          imgRef.current,
+          imgTargets,
           {
             opacity: 0,
             scale: 0.85,
-            x: imagePos === "right" ? 40 : -40,
-            duration: 0.8,
+            x: activePosition === "right" ? 30 : -30,
+            duration: 0.6,
+            stagger: 0.1,
             ease: "back.out(1.4)",
           },
           "-=0.5"
@@ -173,8 +179,10 @@ function Section({
         if (split) split.revert();
       };
     },
-    { scope: sectionRef, dependencies: [direction, listStagger, imagePos] }
+    { scope: sectionRef, dependencies: [direction, listStagger, activePosition, imageList.length] }
   );
+
+  const hasImages = imageList.length > 0;
 
   return (
     <section
@@ -183,10 +191,10 @@ function Section({
       className={`${customStyle ? "" : bg} font-body scroll-mt-20 px-6 py-20 md:px-16`}
       style={customStyle}
     >
-      <div className={`mx-auto max-w-6xl ${image ? "grid items-center gap-8 md:grid-cols-2 md:gap-12" : "max-w-3xl"}`}>
+      <div className={`mx-auto max-w-6xl ${hasImages ? "grid items-start gap-8 md:grid-cols-2 md:gap-12" : "max-w-3xl"}`}>
         
         {/* Content Box */}
-        <div className={image && imagePos === "left" ? "md:order-2" : "md:order-1"}>
+        <div className={hasImages && activePosition === "left" ? "md:order-2" : "md:order-1"}>
           <p className="eyebrow-el mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#FAAA48]">
             {eyebrow}
           </p>
@@ -196,16 +204,39 @@ function Section({
           <div className="animate-in space-y-4 text-base leading-relaxed opacity-90 md:text-lg">{children}</div>
         </div>
 
-        {/* Section Image - Compact Sizing */}
-        {image && (
-          <div className={`section-img w-full max-w-md justify-self-center ${imagePos === "left" ? "md:order-1" : "md:order-2"}`} ref={imgRef}>
-            <div className="overflow-hidden rounded-xl shadow-lg ring-1 ring-[#FAAA48]/20">
-              <img
-                src={image.src}
-                alt={image.alt || ""}
-                className="h-48 w-full object-cover transition-transform duration-500 hover:scale-105 sm:h-60 md:h-72"
-              />
-            </div>
+        {/* Section Image(s) */}
+        {hasImages && (
+          <div
+            className={`w-full max-w-md justify-self-center ${activePosition === "left" ? "md:order-1" : "md:order-2"}`}
+            ref={imgRef}
+          >
+            {/* Render mini-grid if multiple photos, single image frame if just 1 */}
+            {imageList.length === 1 ? (
+              <div className="section-img-item overflow-hidden rounded-xl shadow-lg ring-1 ring-[#FAAA48]/20">
+                <img
+                  src={imageList[0].src}
+                  alt={imageList[0].alt || ""}
+                  className="h-48 w-full object-cover transition-transform duration-500 hover:scale-105 sm:h-60 md:h-72"
+                />
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-3">
+                {imageList.map((img, idx) => (
+                  <div
+                    key={idx}
+                    className={`section-img-item overflow-hidden rounded-xl shadow-md ring-1 ring-[#FAAA48]/20 ${
+                      imageList.length % 2 !== 0 && idx === imageList.length - 1 ? "col-span-2" : ""
+                    }`}
+                  >
+                    <img
+                      src={img.src}
+                      alt={img.alt || ""}
+                      className="h-28 w-full object-cover transition-transform duration-500 hover:scale-105 sm:h-36"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
@@ -253,7 +284,6 @@ function Gallery({ id = "gallery", eyebrow = "A glimpse", title = "Gallery", ton
         <h2 ref={titleRef} className="font-display mb-10 text-3xl font-semibold md:text-4xl">
           {title}
         </h2>
-        {/* Gallery Grid - Reduced tile sizes */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 md:gap-4">
           {images.map((img, i) => (
             <div key={i} className="gallery-img aspect-square overflow-hidden rounded-xl shadow-md">
@@ -624,7 +654,7 @@ export default function CompanySite() {
         </p>
       </Section>
 
-      {/* Activities */}
+      {/* Activities - NOW SUPPORTS MULTIPLE PHOTOS (5 PHOTOS) */}
       <Section
         id="activities"
         eyebrow="What we do"
@@ -632,11 +662,14 @@ export default function CompanySite() {
         tone="light"
         direction="up"
         listStagger
-        image={{
-          src: "/img_4452.jpeg",
-          alt: "Activities image",
-          position: "left",
-        }}
+        imagePosition="left"
+        images={[
+          { src: "/img_4452.jpeg", alt: "Activity photo 1" },
+          { src: "/img_2256.jpeg", alt: "Activity photo 2" },
+          { src: "/img__2261.jpeg", alt: "Activity photo 3" },
+          { src: "/img.jpeg", alt: "Activity photo 4" },
+          { src: "/img_2379.jpeg", alt: "Activity photo 5" },
+        ]}
       >
         <ul className="list-disc space-y-2 pl-5">
           <li>Making contact with children families, referral process and recruiting children</li>
