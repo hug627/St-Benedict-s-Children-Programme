@@ -10,9 +10,13 @@ const router = express.Router();
 const SALT_ROUNDS = 12;
 
 function signToken(user) {
-  return jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN || "7d",
-  });
+  return jwt.sign(
+    { userId: user._id, role: user.role },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: process.env.JWT_EXPIRES_IN || "7d",
+    }
+  );
 }
 
 function setAuthCookie(res, token) {
@@ -51,11 +55,6 @@ router.post("/signup", async (req, res) => {
       user: { id: user._id, name: user.name, email: user.email, role: user.role },
     });
   } catch (err) {
-    // Race-condition safety net: if two signup requests for the same email
-    // arrive at nearly the same moment, both could pass the findOne check
-    // above before either finishes. MongoDB's own unique index on `email`
-    // (see models/User.js) rejects the second write with error code 11000 —
-    // catch that here and turn it into the same friendly message.
     if (err.code === 11000) {
       return res.status(409).json({ message: "That email is already registered." });
     }
@@ -103,20 +102,28 @@ router.post("/logout", (req, res) => {
 
 // GET /api/auth/me — returns the currently logged-in user (or 401)
 router.get("/me", requireAuth, async (req, res) => {
-  const user = await User.findById(req.user.userId).select("name email role");
-  if (!user) return res.status(404).json({ message: "User not found." });
-  res.json({ user });
+  try {
+    const user = await User.findById(req.user.userId).select("name email role");
+    if (!user) return res.status(404).json({ message: "User not found." });
+    res.json({ user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error checking session." });
+  }
 });
 
 // POST /api/auth/forgot-password
 router.post("/forgot-password", async (req, res) => {
   try {
     const { email } = req.body;
-    const user = await User.findOne({ email: email?.toLowerCase() });
+    if (!email) {
+      return res.status(400).json({ message: "Email is required." });
+    }
+
+    const user = await User.findOne({ email: email.toLowerCase() });
 
     // Always respond the same way whether or not the email exists —
-    // this prevents attackers from using this endpoint to discover which
-    // emails are registered.
+    // this prevents attackers from discovering registered emails.
     const genericResponse = { message: "If that email is registered, a reset link has been sent." };
 
     if (!user) return res.json(genericResponse);
@@ -128,12 +135,14 @@ router.post("/forgot-password", async (req, res) => {
     user.resetPasswordExpires = Date.now() + 60 * 60 * 1000; // 1 hour
     await user.save();
 
-    const resetLink = `${process.env.CLIENT_URL}/reset-password/${rawToken}`;
+    const clientUrl = process.env.CLIENT_URL || "https://st-benedict-s-children-programme.vercel.app";
+    const resetLink = `${clientUrl}/reset-password/${rawToken}`;
+    
     await sendPasswordResetEmail(user.email, resetLink);
 
     res.json(genericResponse);
   } catch (err) {
-    console.error(err);
+    console.error("Forgot password error:", err);
     res.status(500).json({ message: "Something went wrong. Please try again." });
   }
 });
