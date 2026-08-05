@@ -378,6 +378,7 @@ export default function CompanySite() {
       <div className="bg-[#240c02] px-4 py-1.5 text-xs text-[#FFDDAC] sm:px-6 md:px-10">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2">
           <div className="flex flex-wrap items-center gap-4">
+            <span className="hover:text-[#FAAA48]">Get in touch </span>
             <span>📧 <a href="mailto:st.benedict.c.p@gmail.com" className="hover:text-[#FAAA48]">st.benedict.c.p@gmail.com</a></span>
             <span className="hidden sm:inline">|</span>
             <span className="hidden sm:inline"><a href="mailto:vincentonsongo72@gmail.com" className="hover:text-[#FAAA48]">vincentonsongo72@gmail.com</a></span>
