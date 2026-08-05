@@ -47,14 +47,30 @@ app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
-app.get("/api/health", (req, res) => {
-  res.json({ status: "ok" });
-});
+// Upgraded Health Check to handle GET and HEAD requests efficiently
+app.route("/api/health")
+  .get((req, res) => res.status(200).json({ status: "ok" }))
+  .head((req, res) => res.status(200).end());
 
-// 4. API Routes
+// 4. Self-Pinging Function
+const startSelfPing = () => {
+  const SERVER_URL = process.env.SERVER_URL || "https://st-benedict-s-children-programme-1.onrender.com";
+  const INTERVAL = 10 * 60 * 1000; // Pings every 10 minutes
+
+  setInterval(async () => {
+    try {
+      const response = await fetch(`${SERVER_URL}/api/health`, { method: "HEAD" });
+      console.log(`[Self-Ping] Success: status ${response.status} at ${new Date().toISOString()}`);
+    } catch (err) {
+      console.error(`[Self-Ping] Failed: ${err.message}`);
+    }
+  }, INTERVAL);
+};
+
+// 5. API Routes
 app.use("/api/auth", authRoutes);
 
-// 5. Database Connection & Server Startup
+// 6. Database Connection & Server Startup
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
@@ -64,6 +80,11 @@ mongoose
 
     app.listen(port, () => {
       console.log(`🚀 Server running on port ${port}`);
+
+      // Start pinging itself only in production environments
+      if (process.env.NODE_ENV === "production") {
+        startSelfPing();
+      }
     });
   })
   .catch((err) => {
