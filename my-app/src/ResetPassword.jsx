@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-const API_URL = "http://localhost:5000/api/auth";
+// Fixed: Replaced localhost with dynamic env variable + Render production fallback
+const API_URL =
+  import.meta.env.VITE_API_BASE_URL 
+    ? `${import.meta.env.VITE_API_BASE_URL}/api/auth`
+    : "https://st-benedict-s-children-programme-1.onrender.com/api/auth";
 
 const FONT_IMPORT = `
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap');
@@ -31,7 +35,7 @@ export default function ResetPassword() {
       setMessage({ text: data.message, type: "success" });
       setTimeout(() => navigate("/auth"), 2000);
     } catch (err) {
-      setMessage({ text: err.message, type: "error" });
+      setMessage({ text: err.message || "Failed to connect to server", type: "error" });
     } finally {
       setLoading(false);
     }
