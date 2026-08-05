@@ -1,26 +1,14 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-// Use Port 587 with STARTTLS to prevent Render outbound timeouts
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false, // Must be false for port 587
-  requireTLS: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  tls: {
-    rejectUnauthorized: false, // Prevents self-signed certificate blocking on cloud hosts
-  },
-});
+// Initializes Resend using your secret environment variable
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendPasswordResetEmail(toEmail, resetLink) {
   try {
-    console.log(`Attempting to send reset email to: ${toEmail}`);
+    console.log(`Sending password reset email via Resend API to: ${toEmail}`);
 
-    const info = await transporter.sendMail({
-      from: `"St Benedict's Children Programme" <${process.env.EMAIL_USER}>`,
+    const data = await resend.emails.send({
+      from: "onboarding@resend.dev", // Default test sender provided by Resend
       to: toEmail,
       subject: "Reset your password",
       html: `
@@ -53,10 +41,10 @@ export async function sendPasswordResetEmail(toEmail, resetLink) {
       `,
     });
 
-    console.log("✅ Email sent successfully:", info.response);
-    return info;
+    console.log("✅ Email sent successfully via Resend:", data);
+    return data;
   } catch (err) {
-    console.error("❌ Failed to send email during password reset:", err);
+    console.error("❌ Failed to send email via Resend:", err);
     throw err;
   }
 }
