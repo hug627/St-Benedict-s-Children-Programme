@@ -746,9 +746,9 @@ export default function CompanySite() {
         </ul>
       </Section>
 
-      {/* Core Values */}
-      <Section id="values" eyebrow="What we believe in" title="Core Values" tone="dark" direction="left" listStagger>
-        <ul className="list-disc space-y-3 pl-5 marker:text-[#FAAA48]">
+      {/* Core Values - Pill Style */}
+      <Section id="values" eyebrow="What we believe in" title="Core Values" tone="dark" direction="left">
+        <div className="flex flex-wrap gap-2.5 pt-2">
           {[
             "Moral Values",
             "Mutual Understanding",
@@ -762,11 +762,14 @@ export default function CompanySite() {
             "Communication",
             "Respect",
           ].map((value) => (
-            <li key={value} className="text-base font-medium text-[#FFDDAC] md:text-lg">
+            <span
+              key={value}
+              className="rounded-full bg-[#FAAA48]/10 px-4 py-2 text-sm font-medium text-[#FFDDAC] ring-1 ring-[#FAAA48]/30 transition-colors hover:bg-[#FAAA48] hover:text-[#2F0F03]"
+            >
               {value}
-            </li>
+            </span>
           ))}
-        </ul>
+        </div>
       </Section>
 
       {/* Gallery */}
