@@ -383,9 +383,6 @@ export default function CompanySite() {
             <span className="hidden sm:inline">|</span>
             <span className="hidden sm:inline"><a href="mailto:vincentonsongo72@gmail.com" className="hover:text-[#FAAA48]">vincentonsongo72@gmail.com</a></span>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="text-[#FAAA48] font-medium">Support: Mpesa Paybill 303030</span>
-          </div>
         </div>
       </div>
 
