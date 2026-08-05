@@ -10,11 +10,6 @@ import "./App.css";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, SplitText);
 
-// Palette
-// --accent : #FAAA48  (orange/gold — buttons, eyebrows, highlights)
-// --light  : #FFDDAC  (light peach — "light" section bg / text on dark bg)
-// --dark   : #2F0F03  (deep brown — "dark" section bg / text on light bg)
-
 const NAV_ITEMS = [
   { id: "background", label: "Background" },
   { id: "location", label: "Location" },
@@ -56,9 +51,6 @@ function CloseIcon({ size = 22, color = "currentColor" }) {
   );
 }
 
-/**
- * Section Component — with single/multiple responsive image support and GSAP scroll animations.
- */
 function Section({
   id,
   eyebrow,
@@ -69,8 +61,8 @@ function Section({
   listStagger = false,
   bgColor,
   textColor,
-  image, // Single image: { src: string, alt: string, position?: "left" | "right" }
-  images, // Array of images: [{ src: string, alt: string }], position?: "left" | "right"
+  image,
+  images,
   imagePosition = "right",
 }) {
   const sectionRef = useRef(null);
@@ -79,7 +71,6 @@ function Section({
   const bg = tone === "dark" ? "bg-[#2F0F03] text-[#FFDDAC]" : "bg-[#FFDDAC] text-[#2F0F03]";
   const customStyle = bgColor ? { backgroundColor: bgColor, color: textColor || "#FFDDAC" } : undefined;
 
-  // Resolve position and image array
   const activePosition = image?.position || imagePosition;
   const imageList = images || (image ? [image] : []);
 
@@ -192,8 +183,6 @@ function Section({
       style={customStyle}
     >
       <div className={`mx-auto max-w-6xl ${hasImages ? "grid items-start gap-8 md:grid-cols-2 md:gap-12" : "max-w-3xl"}`}>
-        
-        {/* Content Box */}
         <div className={hasImages && activePosition === "left" ? "md:order-2" : "md:order-1"}>
           <p className="eyebrow-el mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#FAAA48]">
             {eyebrow}
@@ -204,13 +193,11 @@ function Section({
           <div className="animate-in space-y-4 text-base leading-relaxed opacity-90 md:text-lg">{children}</div>
         </div>
 
-        {/* Section Image(s) */}
         {hasImages && (
           <div
             className={`w-full max-w-md justify-self-center ${activePosition === "left" ? "md:order-1" : "md:order-2"}`}
             ref={imgRef}
           >
-            {/* Render mini-grid if multiple photos, single image frame if just 1 */}
             {imageList.length === 1 ? (
               <div className="section-img-item overflow-hidden rounded-xl shadow-lg ring-1 ring-[#FAAA48]/20">
                 <img
@@ -239,7 +226,6 @@ function Section({
             )}
           </div>
         )}
-
       </div>
     </section>
   );
@@ -299,6 +285,7 @@ function Gallery({ id = "gallery", eyebrow = "A glimpse", title = "Gallery", ton
 export default function CompanySite() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [desktopMenuOpen, setDesktopMenuOpen] = useState(false);
+  const [donateModalOpen, setDonateModalOpen] = useState(false);
   const desktopMenuRef = useRef(null);
   const [scrolled, setScrolled] = useState(false);
   const heroRef = useRef(null);
@@ -387,10 +374,24 @@ export default function CompanySite() {
     <div className="font-body overflow-x-hidden">
       <style>{FONT_IMPORT}</style>
 
-      {/* Nav */}
+      {/* Top Banner for Quick Contact Info */}
+      <div className="bg-[#240c02] px-4 py-1.5 text-xs text-[#FFDDAC] sm:px-6 md:px-10">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2">
+          <div className="flex flex-wrap items-center gap-4">
+            <span>📧 <a href="mailto:st.benedict.c.p@gmail.com" className="hover:text-[#FAAA48]">st.benedict.c.p@gmail.com</a></span>
+            <span className="hidden sm:inline">|</span>
+            <span className="hidden sm:inline"><a href="mailto:vincentonsongo72@gmail.com" className="hover:text-[#FAAA48]">vincentonsongo72@gmail.com</a></span>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-[#FAAA48] font-medium">Support: Mpesa Paybill 303030</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Header */}
       <header
-        className={`fixed top-0 z-50 w-full transition-colors duration-300 ${
-          scrolled ? "bg-[#2F0F03]/95 backdrop-blur shadow-md" : "bg-transparent"
+        className={`sticky top-0 z-50 w-full transition-colors duration-300 ${
+          scrolled ? "bg-[#2F0F03]/95 backdrop-blur shadow-md" : "bg-[#2F0F03]"
         }`}
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6 md:px-10">
@@ -401,82 +402,91 @@ export default function CompanySite() {
             St Benedict's Children Programme
           </button>
 
-          <div ref={desktopMenuRef} className="relative hidden shrink-0 md:block">
+          <div className="flex items-center gap-4">
             <button
-              onClick={() => setDesktopMenuOpen((v) => !v)}
-              aria-haspopup="true"
-              aria-expanded={desktopMenuOpen}
-              className="flex items-center gap-1.5 text-sm font-medium text-[#FFDDAC] transition-colors hover:text-[#FAAA48]"
+              onClick={() => setDonateModalOpen(true)}
+              className="rounded-full bg-[#FAAA48] px-4 py-1.5 text-xs font-bold text-[#2F0F03] transition-transform hover:scale-105 sm:text-sm"
             >
-              Menu
-              <span className={`inline-block transition-transform duration-200 ${desktopMenuOpen ? "rotate-180" : ""}`}>
-                ▾
-              </span>
+              Donate Now
             </button>
 
-            {desktopMenuOpen && (
-              <div className="absolute right-0 top-full mt-3 w-52 overflow-hidden rounded-xl bg-[#2F0F03] shadow-xl ring-1 ring-[#FAAA48]/20">
-                {NAV_ITEMS.map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => {
-                      scrollTo(item.id);
-                      setDesktopMenuOpen(false);
-                    }}
-                    className="block w-full px-4 py-2.5 text-left text-sm font-medium text-[#FFDDAC] transition-colors hover:bg-[#FAAA48]/10 hover:text-[#FAAA48]"
-                  >
-                    {item.label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {user ? (
-            <div ref={accountMenuRef} className="relative hidden shrink-0 md:block">
+            <div ref={desktopMenuRef} className="relative hidden shrink-0 md:block">
               <button
-                onClick={() => setAccountMenuOpen((v) => !v)}
+                onClick={() => setDesktopMenuOpen((v) => !v)}
                 aria-haspopup="true"
-                aria-expanded={accountMenuOpen}
-                aria-label={`Account menu for ${user.name}`}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-[#FAAA48] text-sm font-semibold text-[#2F0F03] transition-transform hover:scale-105"
+                aria-expanded={desktopMenuOpen}
+                className="flex items-center gap-1.5 text-sm font-medium text-[#FFDDAC] transition-colors hover:text-[#FAAA48]"
               >
-                {user.name?.charAt(0).toUpperCase() || "U"}
+                Menu
+                <span className={`inline-block transition-transform duration-200 ${desktopMenuOpen ? "rotate-180" : ""}`}>
+                  ▾
+                </span>
               </button>
 
-              {accountMenuOpen && (
-                <div className="absolute right-0 top-full mt-3 w-48 overflow-hidden rounded-xl bg-[#2F0F03] shadow-xl ring-1 ring-[#FAAA48]/20">
-                  <div className="border-b border-[#FAAA48]/20 px-4 py-3">
-                    <p className="truncate text-sm font-semibold text-[#FFDDAC]">{user.name}</p>
-                    <p className="truncate text-xs text-[#FFDDAC]/60">{user.email}</p>
-                  </div>
-                  <button
-                    onClick={handleLogout}
-                    className="block w-full px-4 py-2.5 text-left text-sm font-medium text-[#FFDDAC] transition-colors hover:bg-[#FAAA48]/10 hover:text-[#FAAA48]"
-                  >
-                    Log Out
-                  </button>
+              {desktopMenuOpen && (
+                <div className="absolute right-0 top-full mt-3 w-52 overflow-hidden rounded-xl bg-[#2F0F03] shadow-xl ring-1 ring-[#FAAA48]/20">
+                  {NAV_ITEMS.map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        scrollTo(item.id);
+                        setDesktopMenuOpen(false);
+                      }}
+                      className="block w-full px-4 py-2.5 text-left text-sm font-medium text-[#FFDDAC] transition-colors hover:bg-[#FAAA48]/10 hover:text-[#FAAA48]"
+                    >
+                      {item.label}
+                    </button>
+                  ))}
                 </div>
               )}
             </div>
-          ) : (
-            <button
-              onClick={() => navigate("/auth")}
-              className="hidden shrink-0 rounded-full bg-[#FAAA48] px-5 py-2 text-sm font-semibold text-[#2F0F03] transition-transform hover:scale-105 md:block"
-            >
-              Log In
-            </button>
-          )}
 
-          <button
-            className="flex shrink-0 items-center justify-center text-[#FFDDAC] md:hidden"
-            onClick={() => setMenuOpen((v) => !v)}
-            aria-label="Toggle menu"
-            aria-expanded={menuOpen}
-            aria-controls="mobile-nav"
-          >
-            {menuOpen ? <CloseIcon /> : <MenuIcon />}
-          </button>
+            {user ? (
+              <div ref={accountMenuRef} className="relative hidden shrink-0 md:block">
+                <button
+                  onClick={() => setAccountMenuOpen((v) => !v)}
+                  aria-haspopup="true"
+                  aria-expanded={accountMenuOpen}
+                  aria-label={`Account menu for ${user.name}`}
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-[#FAAA48] text-sm font-semibold text-[#2F0F03] transition-transform hover:scale-105"
+                >
+                  {user.name?.charAt(0).toUpperCase() || "U"}
+                </button>
+
+                {accountMenuOpen && (
+                  <div className="absolute right-0 top-full mt-3 w-48 overflow-hidden rounded-xl bg-[#2F0F03] shadow-xl ring-1 ring-[#FAAA48]/20">
+                    <div className="border-b border-[#FAAA48]/20 px-4 py-3">
+                      <p className="truncate text-sm font-semibold text-[#FFDDAC]">{user.name}</p>
+                      <p className="truncate text-xs text-[#FFDDAC]/60">{user.email}</p>
+                    </div>
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full px-4 py-2.5 text-left text-sm font-medium text-[#FFDDAC] transition-colors hover:bg-[#FAAA48]/10 hover:text-[#FAAA48]"
+                    >
+                      Log Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button
+                onClick={() => navigate("/auth")}
+                className="hidden shrink-0 rounded-full border border-[#FAAA48] px-5 py-1.5 text-sm font-semibold text-[#FAAA48] transition-all hover:bg-[#FAAA48] hover:text-[#2F0F03] md:block"
+              >
+                Log In
+              </button>
+            )}
+
+            <button
+              className="flex shrink-0 items-center justify-center text-[#FFDDAC] md:hidden"
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-label="Toggle menu"
+              aria-expanded={menuOpen}
+              aria-controls="mobile-nav"
+            >
+              {menuOpen ? <CloseIcon /> : <MenuIcon />}
+            </button>
+          </div>
         </div>
 
         <nav
@@ -512,7 +522,7 @@ export default function CompanySite() {
                     setMenuOpen(false);
                     navigate("/auth");
                   }}
-                  className="mt-1 w-fit rounded-full bg-[#FAAA48] px-5 py-2 text-sm font-semibold text-[#2F0F03]"
+                  className="mt-1 w-fit rounded-full border border-[#FAAA48] px-5 py-1.5 text-sm font-semibold text-[#FAAA48]"
                 >
                   Log In
                 </button>
@@ -521,6 +531,41 @@ export default function CompanySite() {
           </div>
         </nav>
       </header>
+
+      {/* Donation Details Modal */}
+      {donateModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+          <div className="relative w-full max-w-md rounded-2xl bg-[#2F0F03] p-6 text-[#FFDDAC] shadow-2xl ring-1 ring-[#FAAA48]/30">
+            <button 
+              onClick={() => setDonateModalOpen(false)}
+              className="absolute right-4 top-4 text-[#FFDDAC] hover:text-[#FAAA48]"
+            >
+              <CloseIcon />
+            </button>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FAAA48]">Make a Difference</p>
+            <h3 className="font-display my-2 text-2xl font-bold">Support Our Programme</h3>
+            <p className="mb-6 text-sm opacity-80">Your contribution helps provide basic needs, education, and shelter to street children in Mathare.</p>
+            
+            <div className="space-y-4 rounded-xl bg-[#240c02] p-4 text-left">
+              <div>
+                <p className="text-xs font-medium uppercase text-[#FAAA48]">Mpesa Paybill</p>
+                <p className="text-lg font-bold">303030</p>
+              </div>
+              <div className="border-t border-[#FAAA48]/20 pt-3">
+                <p className="text-xs font-medium uppercase text-[#FAAA48]">ABSA Bank Account</p>
+                <p className="text-lg font-bold">0671410505</p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setDonateModalOpen(false)}
+              className="mt-6 w-full rounded-full bg-[#FAAA48] py-2.5 text-sm font-bold text-[#2F0F03]"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Hero */}
       <section
@@ -535,12 +580,20 @@ export default function CompanySite() {
           <p className="mt-6 max-w-xl font-body text-base opacity-80 sm:text-lg">
              It's a boy street children rehabilitation center 
           </p>
-          <button
-            onClick={() => scrollTo("background")}
-            className="mt-10 w-fit rounded-full bg-[#FAAA48] px-6 py-3 text-sm font-semibold text-[#2F0F03] transition-transform hover:scale-105"
-          >
-            Learn more
-          </button>
+          <div className="mt-10 flex flex-wrap gap-4">
+            <button
+              onClick={() => scrollTo("background")}
+              className="rounded-full bg-[#FAAA48] px-6 py-3 text-sm font-semibold text-[#2F0F03] transition-transform hover:scale-105"
+            >
+              Learn more
+            </button>
+            <button
+              onClick={() => setDonateModalOpen(true)}
+              className="rounded-full border-2 border-[#FAAA48] px-6 py-3 text-sm font-semibold text-[#FAAA48] transition-transform hover:scale-105"
+            >
+              Support Us
+            </button>
+          </div>
         </div>
       </section>
 
@@ -654,7 +707,7 @@ export default function CompanySite() {
         </p>
       </Section>
 
-      {/* Activities - NOW SUPPORTS MULTIPLE PHOTOS (5 PHOTOS) */}
+      {/* Activities */}
       <Section
         id="activities"
         eyebrow="What we do"
