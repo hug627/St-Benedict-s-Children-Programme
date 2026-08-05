@@ -717,11 +717,11 @@ export default function CompanySite() {
         listStagger
         imagePosition="left"
         images={[
-          { src: "/img_4452.jpeg", alt: "Activity photo 1" },
-          { src: "/img_2256.jpeg", alt: "Activity photo 2" },
-          { src: "/img__2261.jpeg", alt: "Activity photo 3" },
-          { src: "/img.jpeg", alt: "Activity photo 4" },
-          { src: "/img_2379.jpeg", alt: "Activity photo 5" },
+          { src: "/img_1.jpeg", alt: "Activity photo 1" },
+          { src: "/img_2.jpeg", alt: "Activity photo 2" },
+          { src: "/img_3.jpeg", alt: "Activity photo 3" },
+          { src: "/img_4.jpeg", alt: "Activity photo 4" },
+          { src: "/img_5.jpeg", alt: "Activity photo 5" },
         ]}
       >
         <ul className="list-disc space-y-2 pl-5">
