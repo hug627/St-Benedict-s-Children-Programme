@@ -240,7 +240,7 @@ function Section({
 function Stories({ id = "stories", eyebrow = "Real impact", title = "Success Stories", tone = "light", people = [] }) {
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
-  const bg = tone === "light" ? "bg-[#FFDDAC] text-[#2F0F03]" : "bg-[#FFDDAC] text-[#2F0F03]";
+  const bg = tone === "light" ? "bg-[#FFDDAC] text-[#2F0F03]" : "bg-[#2F0F03] text-[#FFDDAC]";
 
   useGSAP(
     () => {
