@@ -237,10 +237,10 @@ function Section({
  * name, achievement line, and a short paragraph. Pass an array of
  * { photo, name, achievement, story }.
  */
-function Stories({ id = "stories", eyebrow = "Real impact", title = "Success Stories", tone = "dark", people = [] }) {
+function Stories({ id = "stories", eyebrow = "Real impact", title = "Success Stories", tone = "light", people = [] }) {
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
-  const bg = tone === "dark" ? "bg-[#2F0F03] text-[#FFDDAC]" : "bg-[#FFDDAC] text-[#2F0F03]";
+  const bg = tone === "light" ? "bg-[#FFDDAC] text-[#2FOFO3]" : "bg-[#FFDDAC] text-[#2F0F03]";
 
   useGSAP(
     () => {
