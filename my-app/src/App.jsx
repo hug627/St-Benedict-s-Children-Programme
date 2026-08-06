@@ -889,7 +889,7 @@ export default function CompanySite() {
         id="gallery"
         eyebrow="A glimpse"
         title="Gallery"
-        tone="light"
+        tone="dark"
         images={[
           { src: "/img_2256.jpeg", alt: "Programme photo 1" },
           { src: "/img__2261.jpeg", alt: "Programme photo 2" },
