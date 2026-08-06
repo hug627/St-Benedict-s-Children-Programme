@@ -858,7 +858,7 @@ export default function CompanySite() {
         id="stories"
         eyebrow="Real impact"
         title="Success Stories"
-        tone="dark"
+        tone="light"
         people={[
           {
             photo: "/story-1.jpeg",
