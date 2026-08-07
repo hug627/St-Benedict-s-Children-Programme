@@ -803,6 +803,9 @@ export default function CompanySite() {
           { src: "/img_3.jpeg", alt: "Activity photo 3" },
           { src: "/img_4.jpeg", alt: "Activity photo 4" },
           { src: "/img_5.jpeg", alt: "Activity photo 5" },
+          { src: "/img_12.jpeg", alt: "Activity photo 6" },
+          { src: "/img_11.jpeg", alt: "Activity photo 7" },
+          
         ]}
       >
         <ul className="list-disc space-y-2 pl-5">
@@ -861,14 +864,14 @@ export default function CompanySite() {
         tone="light"
         people={[
           {
-            photo: "/story-1.jpeg",
+            photo: "/img_7.jpeg",
             name: "Replace with name",
             achievement: "University Graduate — Replace with degree/course",
             story:
               "Replace with a short paragraph about their journey through the programme and what they achieved.",
           },
           {
-            photo: "/story-2.jpeg",
+            photo: "/img_8.jpeg",
             name: "Replace with name",
             achievement: "University Graduate — Replace with degree/course",
             story:
@@ -897,6 +900,8 @@ export default function CompanySite() {
           { src: "/img_2379.jpeg", alt: "Programme photo 4" },
           { src: "/img_2381.jpeg", alt: "Programme photo 5" },
           { src: "/img_4452.jpeg", alt: "Programme photo 6" },
+          { src:  "/img_14.jpeg", alt: "Programme photo 7"},
+          { src:  "/img_13.jpeg", alt: "Programme photo 8"},
         ]}
       />
 
