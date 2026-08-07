@@ -865,15 +865,15 @@ export default function CompanySite() {
         people={[
           {
             photo: "/img_7.jpeg",
-            name: "Replace with name",
-            achievement: "University Graduate — Replace with degree/course",
+            name: "Esther,
+            achievement: "University Graduate — Bachelor of Degree in Occuaption Therapy",
             story:
               "Replace with a short paragraph about their journey through the programme and what they achieved.",
           },
           {
             photo: "/img_8.jpeg",
-            name: "Replace with name",
-            achievement: "University Graduate — Replace with degree/course",
+            name: "Miriam ",
+            achievement: "University Graduate — Bachelor of Degree in Education",
             story:
               "Replace with a short paragraph about their journey through the programme and what they achieved.",
           },
