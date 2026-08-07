@@ -237,10 +237,10 @@ function Section({
  * name, achievement line, and a short paragraph. Pass an array of
  * { photo, name, achievement, story }.
  */
-function Stories({ id = "stories", eyebrow = "Real impact", title = "Success Stories", tone = "light", people = [] }) {
+function Stories({ id = "stories", eyebrow = "Real impact", title = "Success Stories", tone = "dark", people = [] }) {
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
-  const bg = tone === "light" ? "bg-[#FFDDAC] text-[#2F0F03]" : "bg-[#2F0F03] text-[#FFDDAC]";
+  const bg = tone === "dark" ? "bg-[#2F0F03] text-[#FFDDAC]" : "bg-[#FFDDAC] text-[#2F0F03]";
 
   useGSAP(
     () => {
@@ -858,7 +858,7 @@ export default function CompanySite() {
         id="stories"
         eyebrow="Real impact"
         title="Success Stories"
-        tone="light"
+        tone="dark"
         people={[
           {
             photo: "/story-1.jpeg",
@@ -889,7 +889,7 @@ export default function CompanySite() {
         id="gallery"
         eyebrow="A glimpse"
         title="Gallery"
-        tone="dark"
+        tone="light"
         images={[
           { src: "/img_2256.jpeg", alt: "Programme photo 1" },
           { src: "/img__2261.jpeg", alt: "Programme photo 2" },
@@ -900,7 +900,7 @@ export default function CompanySite() {
         ]}
       />
 
-      <footer className="bg-[#2F0F03] px-4 py-10 text-[#FFDDAC] sm:px-6 md:px-16">
+      <footer className="bg-[#FFDDAC] px-4 py-10 text-[#2F0F03] sm:px-6 md:px-16">
         <div className="mx-auto max-w-3xl space-y-6 text-center">
           <div className="space-y-1">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FAAA48]">Get in touch</p>
