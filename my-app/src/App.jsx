@@ -865,7 +865,7 @@ export default function CompanySite() {
         people={[
           {
             photo: "/img_7.jpeg",
-            name: "Esther,
+            name: "Esther",
             achievement: "University Graduate — Bachelor of Degree in Occuaption Therapy",
             story:
               "Replace with a short paragraph about their journey through the programme and what they achieved.",
