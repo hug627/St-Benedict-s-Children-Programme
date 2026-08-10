@@ -776,7 +776,7 @@ export default function CompanySite() {
         title="Aims And Objectives of the St.Benedict's Children Centre (SBCC)"
         tone="dark"
         direction="right"
-        image={{ src: "/img_2381.jpeg", alt: "Aims image", position: "right" }}
+        image={{ src: "/img_18.jpeg", alt: "Aims image", position: "right" }}
       >
         <p>
           St.Benedict's children programme is a church based initiative that provides a strong foundation for children
@@ -892,9 +892,9 @@ export default function CompanySite() {
         images={[
           { src: "/img_2256.jpeg", alt: "Programme photo 1" },
           { src: "/img__2261.jpeg", alt: "Programme photo 2" },
-          { src: "/img.jpeg", alt: "Programme photo 3" },
-          { src: "/img_2379.jpeg", alt: "Programme photo 4" },
-          { src: "/img_2381.jpeg", alt: "Programme photo 5" },
+          { src: "/img_15", alt: "Programme photo 3" },
+          { src: "/img_16.jpeg", alt: "Programme photo 4" },
+          { src: "/img_17.jpeg", alt: "Programme photo 5" },
           { src: "/img_4452.jpeg", alt: "Programme photo 6" },
           { src:  "/img_14.jpeg", alt: "Programme photo 7"},
           { src:  "/img_13.jpeg", alt: "Programme photo 8"},
