@@ -481,10 +481,6 @@ export default function CompanySite() {
             <span>
               📧 <a href="mailto:st.benedict.c.p@gmail.com" className="hover:text-[#FAAA48]">st.benedict.c.p@gmail.com</a>
             </span>
-            <span className="hidden sm:inline">|</span>
-            <span className="hidden sm:inline">
-              <a href="mailto:vincentonsongo72@gmail.com" className="hover:text-[#FAAA48]">vincentonsongo72@gmail.com</a>
-            </span>
           </div>
         </div>
       </div>
@@ -912,11 +908,6 @@ export default function CompanySite() {
             <p className="break-words text-sm">
               <a href="mailto:st.benedict.c.p@gmail.com" className="hover:text-[#FAAA48]">
                 st.benedict.c.p@gmail.com
-              </a>
-            </p>
-            <p className="break-words text-sm">
-              <a href="mailto:vincentonsongo72@gmail.com" className="hover:text-[#FAAA48]">
-                vincentonsongo72@gmail.com
               </a>
             </p>
           </div>
