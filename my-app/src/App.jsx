@@ -861,14 +861,14 @@ export default function CompanySite() {
         people={[
           {
             photo: "/img_7.jpeg",
-            name: "Esther",
+            name: "Esther Novins",
             achievement: "University Graduate — Bachelor of Degree in Occuaption Therapy",
             story:
-              "Replace with a short paragraph about their journey through the programme and what they achieved.",
+              "Esther studied at the Presbyterian University here she attained her Degree in Occupation Therapy.",
           },
           {
             photo: "/img_8.jpeg",
-            name: "Miriam ",
+            name: "Miriam Osibori ",
             achievement: "University Graduate — Bachelor of Degree in Education",
             story:
               "Miriam studied at Kisii University here she attained here degree in Education in the year 2025  ",
@@ -921,6 +921,27 @@ export default function CompanySite() {
             achievement: "University Graduate — Julius Mutisya",
             story:
               "Julius Studied at The East African Institute here he attained his Diploma in Social Work in the year 2018",
+          },
+          {
+            photo: "/img_26.jpeg",
+            name: "Replace with name",
+            achievement: "University Graduate — Peter Kioko",
+            story:
+              "Peter studied at Techinal University of Kenya here he attained his Diploma in Medical Records in the year 2019",
+          },
+          {
+            photo: "/img_27.jpeg",
+            name: "Replace with name",
+            achievement: "University Graduate — Stephine Moseti",
+            story:
+              "Stephine studied at East African Institute here he attained his Diploma in Social Work in the yaer 2018",
+          },
+          {
+            photo: "/img_28.jpeg",
+            name: "Replace with name",
+            achievement: "University Graduate — Patrick Odhiambo",
+            story:
+              "Patrick studied at Taita Taveta University  here he attained his Degree in Statistics in the year 2018",
           },
         ]}
       />
