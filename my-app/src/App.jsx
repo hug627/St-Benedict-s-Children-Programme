@@ -871,56 +871,56 @@ export default function CompanySite() {
             name: "Miriam ",
             achievement: "University Graduate — Bachelor of Degree in Education",
             story:
-              "Replace with a short paragraph about their journey through the programme and what they achieved.",
+              "Miriam studied at Kisii University here she attained here degree in Education in the year 2025  ",
           },
           {
             photo: "/img_19.jpeg",
-            name: "Replace with name",
-            achievement: "University Graduate — Replace with degree/course",
+            name: "James Ngigi",
+            achievement: "University Graduate — Degree in Criminology",
             story:
-              "Replace with a short paragraph about their journey through the programme and what they achieved.",
+              "James studied at Masinde Muliro University, he finished his degree of Criminology and graduated in the year 2022",
           },
           {
             photo: "/img_20.jpeg",
-            name: "Replace with name",
-            achievement: "University Graduate — Replace with degree/course",
+            name: "Hesbon Willington",
+            achievement: "University Graduate — Degree in Business Management",
             story:
-              "Replace with a short paragraph about their journey through the programme and what they achieved.",
+              "Hesbon studied at University of Nairobi here he did his Degree in Business Management and graduated in the year 2022",
           },
           {
             photo: "/img_21.jpeg",
-            name: "Replace with name",
-            achievement: "University Graduate — Replace with degree/course",
+            name: "Lilian Owuor",
+            achievement: "University Graduate — Degree in Business Administration and economics",
             story:
-              "Replace with a short paragraph about their journey through the programme and what they achieved.",
+              "Lilian studied at Mount Kenya University here she did her degree in Business Administration and Economics and graduted in the year 2026",
           },
           {
             photo: "/img_22.jpeg",
-            name: "Replace with name",
-            achievement: "University Graduate — Replace with degree/course",
+            name: "Stephen Omondi",
+            achievement: "University Graduate — Degree in Entreprenuership",
             story:
-              "Replace with a short paragraph about their journey through the programme and what they achieved.",
+              "Stephen studied at Jomo Kenyatta University here he attained his degree in Entrepreneurship in the year 2020",
           },
           {
             photo: "/img_23.jpeg",
-            name: "Replace with name",
-            achievement: "University Graduate — Replace with degree/course",
+            name: "Stephen Nkalovwe",
+            achievement: "University Graduate — Degree in Analytical Chemistry",
             story:
-              "Replace with a short paragraph about their journey through the programme and what they achieved.",
+              "Stephen Nkalovwe studied at Jomo Kenyatta University here he attained his Degree in Analytical Chemistry in the year 2021",
           },
           {
             photo: "/img_24.jpeg",
-            name: "Replace with name",
-            achievement: "University Graduate — Replace with degree/course",
+            name: "Walter Oketch",
+            achievement: "University Graduate — Diploma in Photogrammentry and Remote Sensing",
             story:
-              "Replace with a short paragraph about their journey through the programme and what they achieved.",
+              "Walter studied at the Kenya Institute of Survey and Mapping here he attained his Diploma in Photogrammentry and Remote Sensing in the year 2019",
           },
           {
             photo: "/img_25.jpeg",
             name: "Replace with name",
-            achievement: "University Graduate — Replace with degree/course",
+            achievement: "University Graduate — Julius Mutisya",
             story:
-              "Replace with a short paragraph about their journey through the programme and what they achieved.",
+              "Julius Studied at The East African Institute here he attained his Diploma in Social Work in the year 2018",
           },
         ]}
       />
