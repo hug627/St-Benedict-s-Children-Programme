@@ -874,49 +874,49 @@ export default function CompanySite() {
               "Replace with a short paragraph about their journey through the programme and what they achieved.",
           },
           {
-            photo: "/story-3.jpeg",
+            photo: "/img_19.jpeg",
             name: "Replace with name",
             achievement: "University Graduate — Replace with degree/course",
             story:
               "Replace with a short paragraph about their journey through the programme and what they achieved.",
           },
           {
-            photo: "/story-3.jpeg",
+            photo: "/img_20.jpeg",
             name: "Replace with name",
             achievement: "University Graduate — Replace with degree/course",
             story:
               "Replace with a short paragraph about their journey through the programme and what they achieved.",
           },
           {
-            photo: "/story-3.jpeg",
+            photo: "/img_21.jpeg",
             name: "Replace with name",
             achievement: "University Graduate — Replace with degree/course",
             story:
               "Replace with a short paragraph about their journey through the programme and what they achieved.",
           },
           {
-            photo: "/story-3.jpeg",
+            photo: "/img_22.jpeg",
             name: "Replace with name",
             achievement: "University Graduate — Replace with degree/course",
             story:
               "Replace with a short paragraph about their journey through the programme and what they achieved.",
           },
           {
-            photo: "/story-3.jpeg",
+            photo: "/img_23.jpeg",
             name: "Replace with name",
             achievement: "University Graduate — Replace with degree/course",
             story:
               "Replace with a short paragraph about their journey through the programme and what they achieved.",
           },
           {
-            photo: "/story-3.jpeg",
+            photo: "/img_24.jpeg",
             name: "Replace with name",
             achievement: "University Graduate — Replace with degree/course",
             story:
               "Replace with a short paragraph about their journey through the programme and what they achieved.",
           },
           {
-            photo: "/story-3.jpeg",
+            photo: "/img_25.jpeg",
             name: "Replace with name",
             achievement: "University Graduate — Replace with degree/course",
             story:
