@@ -880,6 +880,48 @@ export default function CompanySite() {
             story:
               "Replace with a short paragraph about their journey through the programme and what they achieved.",
           },
+          {
+            photo: "/story-3.jpeg",
+            name: "Replace with name",
+            achievement: "University Graduate — Replace with degree/course",
+            story:
+              "Replace with a short paragraph about their journey through the programme and what they achieved.",
+          },
+          {
+            photo: "/story-3.jpeg",
+            name: "Replace with name",
+            achievement: "University Graduate — Replace with degree/course",
+            story:
+              "Replace with a short paragraph about their journey through the programme and what they achieved.",
+          },
+          {
+            photo: "/story-3.jpeg",
+            name: "Replace with name",
+            achievement: "University Graduate — Replace with degree/course",
+            story:
+              "Replace with a short paragraph about their journey through the programme and what they achieved.",
+          },
+          {
+            photo: "/story-3.jpeg",
+            name: "Replace with name",
+            achievement: "University Graduate — Replace with degree/course",
+            story:
+              "Replace with a short paragraph about their journey through the programme and what they achieved.",
+          },
+          {
+            photo: "/story-3.jpeg",
+            name: "Replace with name",
+            achievement: "University Graduate — Replace with degree/course",
+            story:
+              "Replace with a short paragraph about their journey through the programme and what they achieved.",
+          },
+          {
+            photo: "/story-3.jpeg",
+            name: "Replace with name",
+            achievement: "University Graduate — Replace with degree/course",
+            story:
+              "Replace with a short paragraph about their journey through the programme and what they achieved.",
+          },
         ]}
       />
 
