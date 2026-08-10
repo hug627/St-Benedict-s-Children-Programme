@@ -167,7 +167,7 @@ export default function AuthPage() {
           onClick={() => navigate("/")}
           className="font-display mb-7 block w-full text-center text-lg font-semibold text-[#2F0F03] transition-opacity hover:opacity-70"
         >
-          Company Name
+          St Benedict  Children's Programme 
         </button>
 
         <div className="relative mb-7 flex rounded-full bg-[#FAAA48]/20 p-1">
