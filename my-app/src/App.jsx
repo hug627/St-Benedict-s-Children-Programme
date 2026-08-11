@@ -93,13 +93,13 @@ const SUCCESS_STORIES = [
     story: "Stephen studied at Jomo Kenyatta University, attaining his degree in Entrepreneurship in 2020.",
   },
   {
-    photo: "/img_23.jpeg",
+    photo: "/img_29.jpeg",
     name: "Stephen Nkalovwe",
     achievement: "University Graduate — Degree in Analytical Chemistry",
     story: "Stephen studied at Jomo Kenyatta University, attaining his Degree in Analytical Chemistry in 2021.",
   },
   {
-    photo: "/img_24.jpeg",
+    photo: "/img_30.jpeg",
     name: "Walter Oketch",
     achievement: "Diploma in Photogrammetry and Remote Sensing",
     story: "Walter studied at the Kenya Institute of Survey and Mapping, attaining his Diploma in Photogrammetry and Remote Sensing in 2019.",
