@@ -7,18 +7,21 @@ import authRoutes from "./routes/auth.js";
 
 const app = express();
 
-// 1. Dynamic CORS setup allowing Vercel frontends & local environments
+// 1. Dynamic CORS setup allowing the custom domain, Vercel previews & local dev
 const clientUrl = process.env.CLIENT_URL ? process.env.CLIENT_URL.replace(/\/$/, "") : "";
 
 const corsOptions = {
   origin: (origin, callback) => {
-    // Allow non-browser requests (Postman, curl, server-to-server)
+    // Allow non-browser requests (Postman, curl, server-to-server, health checks)
     if (!origin) return callback(null, true);
 
     const isAllowed =
       (clientUrl && origin === clientUrl) ||
       origin.endsWith(".vercel.app") ||
-      origin.includes("st-benedict") ||
+      // Matches both the apex domain and the www subdomain, since visitors
+      // can land on either — e.g. https://stbenedictschildrencentre.org
+      // and https://www.stbenedictschildrencentre.org both end with this.
+      origin.endsWith("stbenedictschildrencentre.org") ||
       origin === "http://localhost:5173" ||
       origin === "http://localhost:3000";
 
@@ -47,12 +50,13 @@ app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
-// Upgraded Health Check to handle GET and HEAD requests efficiently
-app.route("/api/health")
+// Health check handles GET and HEAD requests efficiently
+app
+  .route("/api/health")
   .get((req, res) => res.status(200).json({ status: "ok" }))
   .head((req, res) => res.status(200).end());
 
-// 4. Self-Pinging Function
+// 4. Self-Pinging Function — keeps Render's free tier from sleeping
 const startSelfPing = () => {
   const SERVER_URL = process.env.SERVER_URL || "https://st-benedict-s-children-programme-1.onrender.com";
   const INTERVAL = 10 * 60 * 1000; // Pings every 10 minutes
@@ -75,12 +79,9 @@ mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
     console.log("✅ Connected to MongoDB");
-
     const port = process.env.PORT || 5000;
-
     app.listen(port, () => {
       console.log(`🚀 Server running on port ${port}`);
-
       // Start pinging itself only in production environments
       if (process.env.NODE_ENV === "production") {
         startSelfPing();
