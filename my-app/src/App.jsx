@@ -64,7 +64,7 @@ const SUCCESS_STORIES = [
   },
   {
     photo: "/img_8.jpeg",
-    name: "Miriam Osibori",
+    name: "Miriam Bosibori",
     achievement: "University Graduate — Bachelor's Degree in Education",
     story: "Miriam studied at Kisii University, where she attained her degree in Education in 2025.",
   },
