@@ -634,9 +634,18 @@ export default function CompanySite() {
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6 md:px-10">
           <button
             onClick={() => scrollTo("home")}
-            className="font-display shrink-0 truncate text-sm font-semibold text-[#FFDDAC] sm:text-base md:text-lg"
+            className="flex shrink-0 items-center gap-3 text-left text-[#FFDDAC]"
+            aria-label="St Benedict's Children Centre - Home"
           >
-            St Benedict's Children Centre
+            <img
+              src="/Logo.png"
+              alt="St Benedict's Children Centre"
+              className="h-12 w-12 object-contain sm:h-14 sm:w-14"
+            />
+
+            <span className="font-display max-w-[180px] text-sm font-semibold leading-tight sm:max-w-none sm:text-base md:text-lg">
+              St Benedict's Children Centre
+            </span>
           </button>
 
           <div className="flex items-center gap-4">
@@ -779,7 +788,7 @@ export default function CompanySite() {
         <div className="relative" ref={heroRef}>
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.3em] text-[#FAAA48]">Welcome</p>
           <h1 ref={heroTitleRef} className="font-display max-w-2xl text-3xl font-semibold leading-tight sm:text-4xl md:text-6xl">
-            St Benedict's Children Centre
+            St Benedict's Children Programme
           </h1>
           <p className="mt-6 max-w-xl font-body text-base opacity-80 sm:text-lg">
             A rehabilitation centre for boys living on the street.
@@ -975,7 +984,7 @@ export default function CompanySite() {
           {/* St. Benedict's Parish */}
           <div className="group rounded-2xl bg-[#2F0F03] p-6 text-[#FFDDAC] shadow-lg ring-1 ring-[#FAAA48]/20 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
             <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#FAAA48] text-2xl">
-             
+              ⛪
             </div>
 
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#FAAA48]">
@@ -1000,7 +1009,7 @@ export default function CompanySite() {
           {/* Other Well-Wishers */}
           <div className="group rounded-2xl bg-[#2F0F03] p-6 text-[#FFDDAC] shadow-lg ring-1 ring-[#FAAA48]/20 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
             <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#FAAA48] text-2xl">
-              
+              ❤️
             </div>
 
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#FAAA48]">
