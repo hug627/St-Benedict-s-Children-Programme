@@ -415,7 +415,7 @@ function Stories({ id = "stories", eyebrow = "Real impact", title = "Success Sto
           {people.map((person) => (
             <div
               key={person.name}
-              className="story-card overflow-hidden rounded-2xl bg-black/10 shadow-lg ring-1 ring-[#FAAA48]/20"
+              className="story-card overflow-hidden rounded-2xl bg-white/60 shadow-lg ring-1 ring-[#FAAA48]/30"
             >
               <div className="aspect-[4/5] w-full overflow-hidden">
                 <img src={person.photo} alt={person.name} className="h-full w-full object-cover" />
@@ -628,18 +628,18 @@ export default function CompanySite() {
       {/* Header */}
       <header
         className={`sticky top-0 z-50 w-full transition-colors duration-300 ${
-          scrolled ? "bg-[#2F0F03]/95 backdrop-blur shadow-md" : "bg-[#2F0F03]"
+          scrolled ? "bg-[#FFDDAC]/95 backdrop-blur shadow-md" : "bg-[#FFDDAC]"
         }`}
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6 md:px-10">
           <button
             onClick={() => scrollTo("home")}
-            className="flex shrink-0 items-center gap-3 text-left text-[#FFDDAC]"
+            className="flex shrink-0 items-center gap-3 text-left text-[#2F0F03]"
             aria-label="St Benedict's Children Centre - Home"
           >
             <img
-              src="/Logo.png"
-              alt="St Benedict's Children Centre"
+              src="/logo.png"
+              alt="St Benedict's Children Centre logo"
               className="h-12 w-12 object-contain sm:h-14 sm:w-14"
             />
 
@@ -661,7 +661,7 @@ export default function CompanySite() {
                 onClick={() => setDesktopMenuOpen((v) => !v)}
                 aria-haspopup="true"
                 aria-expanded={desktopMenuOpen}
-                className="flex items-center gap-1.5 text-sm font-medium text-[#FFDDAC] transition-colors hover:text-[#FAAA48]"
+                className="flex items-center gap-1.5 text-sm font-medium text-[#2F0F03] transition-colors hover:text-[#FAAA48]"
               >
                 Menu
                 <span className={`inline-block transition-transform duration-200 ${desktopMenuOpen ? "rotate-180" : ""}`}>
@@ -678,7 +678,7 @@ export default function CompanySite() {
                         scrollTo(item.id);
                         setDesktopMenuOpen(false);
                       }}
-                      className="block w-full px-4 py-2.5 text-left text-sm font-medium text-[#FFDDAC] transition-colors hover:bg-[#FAAA48]/10 hover:text-[#FAAA48]"
+                      className="block w-full px-4 py-2.5 text-left text-sm font-medium text-[#2F0F03] transition-colors hover:bg-[#FAAA48]/10 hover:text-[#FAAA48]"
                     >
                       {item.label}
                     </button>
@@ -700,10 +700,10 @@ export default function CompanySite() {
                 </button>
 
                 {accountMenuOpen && (
-                  <div className="absolute right-0 top-full mt-3 w-48 overflow-hidden rounded-xl bg-[#2F0F03] shadow-xl ring-1 ring-[#FAAA48]/20">
+                  <div className="absolute right-0 top-full mt-3 w-48 overflow-hidden rounded-xl bg-[#FFDDAC] shadow-xl ring-1 ring-[#FAAA48]/20">
                     <div className="border-b border-[#FAAA48]/20 px-4 py-3">
-                      <p className="truncate text-sm font-semibold text-[#FFDDAC]">{user.name}</p>
-                      <p className="truncate text-xs text-[#FFDDAC]/60">{user.email}</p>
+                      <p className="truncate text-sm font-semibold text-[#2F0F03]">{user.name}</p>
+                      <p className="truncate text-xs text-[#2F0F03]/60">{user.email}</p>
                     </div>
                     <button
                       onClick={handleLogout}
@@ -724,7 +724,7 @@ export default function CompanySite() {
             )}
 
             <button
-              className="flex shrink-0 items-center justify-center text-[#FFDDAC] md:hidden"
+              className="flex shrink-0 items-center justify-center text-[#2F0F03] md:hidden"
               onClick={() => setMenuOpen((v) => !v)}
               aria-label="Toggle menu"
               aria-expanded={menuOpen}
@@ -737,7 +737,7 @@ export default function CompanySite() {
 
         <nav
           id="mobile-nav"
-          className={`grid overflow-hidden bg-[#2F0F03] transition-[grid-template-rows] duration-300 ease-in-out md:hidden ${
+          className={`grid overflow-hidden bg-[#FFDDAC] transition-[grid-template-rows] duration-300 ease-in-out md:hidden ${
             menuOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
           }`}
         >
@@ -746,7 +746,7 @@ export default function CompanySite() {
               <button
                 key={item.id}
                 onClick={() => scrollTo(item.id)}
-                className="py-2 text-left text-sm font-medium text-[#FFDDAC] hover:text-[#FAAA48]"
+                className="py-2 text-left text-sm font-medium text-[#2F0F03] hover:text-[#FAAA48]"
               >
                 {item.label}
               </button>
@@ -754,10 +754,10 @@ export default function CompanySite() {
             <div className="mt-2 border-t border-[#FAAA48]/20 pt-2">
               {user ? (
                 <>
-                  <p className="truncate py-1 text-xs text-[#FFDDAC]/60">{user.email}</p>
+                  <p className="truncate py-1 text-xs text-[#2F0F03]/60">{user.email}</p>
                   <button
                     onClick={handleLogout}
-                    className="py-2 text-left text-sm font-medium text-[#FFDDAC] hover:text-[#FAAA48]"
+                    className="py-2 text-left text-sm font-medium text-[#2F0F03] hover:text-[#FAAA48]"
                   >
                     Log Out
                   </button>
@@ -810,7 +810,7 @@ export default function CompanySite() {
         </div>
       </section>
 
-      <Section id="background" eyebrow="Who we are" title="Historical Background" tone="light" direction="up">
+      <Section id="background" eyebrow="Who we are" title="Historical Background" tone="dark" direction="up">
         <p>
           St. Benedict's Children Programme is the brainchild of the Kolping Family and St. Benedict's Catholic
           Parish, Ruaraka. The idea for its formation can be traced back to 1993, when a group of foresighted
@@ -826,7 +826,7 @@ export default function CompanySite() {
         </p>
       </Section>
 
-      <Section id="location" eyebrow="Where we are" title="Location" tone="dark" direction="left">
+      <Section id="location" eyebrow="Where we are" title="Location" tone="light" direction="left">
         <p>
           St Benedict's Children Centre is located in Mathare North Area 2, near Mathare North Primary School and
           Mathare North Market.
@@ -837,7 +837,7 @@ export default function CompanySite() {
         id="vision"
         eyebrow="Looking ahead"
         title="Vision Statement"
-        tone="light"
+        tone="dark"
         direction="scale"
         image={{ src: "/img__2261.jpeg", alt: "Vision image", position: "left" }}
       >
@@ -848,7 +848,7 @@ export default function CompanySite() {
         id="mission"
         eyebrow="Why we exist"
         title="Mission Statement"
-        tone="dark"
+        tone="light"
         direction="right"
         image={{ src: "/img.jpeg", alt: "Mission image", position: "right" }}
       >
@@ -868,7 +868,7 @@ export default function CompanySite() {
         id="objectives"
         eyebrow="What we're working toward"
         title="Programme Objectives"
-        tone="light"
+        tone="dark"
         direction="left"
         image={{ src: "/img_2379.jpeg", alt: "Objectives image", position: "left" }}
       >
@@ -882,7 +882,7 @@ export default function CompanySite() {
         id="aims"
         eyebrow="What we're reaching for"
         title="Aims And Objectives of the St. Benedict's Children Centre (SBCC)"
-        tone="dark"
+        tone="light"
         direction="right"
         image={{ src: "/img_18.jpeg", alt: "Aims image", position: "right" }}
       >
@@ -896,7 +896,7 @@ export default function CompanySite() {
         id="activities"
         eyebrow="What we do"
         title="Activities"
-        tone="light"
+        tone="dark"
         direction="up"
         listStagger
         imagePosition="left"
@@ -924,12 +924,12 @@ export default function CompanySite() {
         </ul>
       </Section>
 
-      <Section id="values" eyebrow="What we believe in" title="Core Values" tone="dark" direction="left">
+      <Section id="values" eyebrow="What we believe in" title="Core Values" tone="light" direction="left">
         <div className="flex flex-wrap gap-2.5 pt-2">
           {CORE_VALUES.map((value) => (
             <span
               key={value}
-              className="rounded-full bg-[#FAAA48]/10 px-4 py-2 text-sm font-medium text-[#FFDDAC] ring-1 ring-[#FAAA48]/30 transition-colors hover:bg-[#FAAA48] hover:text-[#2F0F03]"
+              className="rounded-full bg-[#2F0F03]/5 px-4 py-2 text-sm font-medium text-[#2F0F03] ring-1 ring-[#2F0F03]/15 transition-colors hover:bg-[#FAAA48] hover:text-[#2F0F03]"
             >
               {value}
             </span>
@@ -946,7 +946,7 @@ export default function CompanySite() {
         id="donors"
         eyebrow="Our Supporters"
         title="Our Donors"
-        tone="light"
+        tone="dark"
         direction="up"
       >
         <p className="mb-8">
@@ -957,7 +957,7 @@ export default function CompanySite() {
 
         <div className="grid gap-6 md:grid-cols-3">
           {/* Kinder-Initiative Kenia (KIK) */}
-          <div className="group rounded-2xl bg-[#2F0F03] p-6 text-[#FFDDAC] shadow-lg ring-1 ring-[#FAAA48]/20 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+          <div className="group rounded-2xl bg-[#FFDDAC] p-6 text-[#2F0F03] shadow-lg ring-1 ring-[#FAAA48]/30 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
             <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#FAAA48] text-2xl">
               🇩🇪
             </div>
@@ -982,7 +982,7 @@ export default function CompanySite() {
           </div>
 
           {/* St. Benedict's Parish */}
-          <div className="group rounded-2xl bg-[#2F0F03] p-6 text-[#FFDDAC] shadow-lg ring-1 ring-[#FAAA48]/20 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+          <div className="group rounded-2xl bg-[#FFDDAC] p-6 text-[#2F0F03] shadow-lg ring-1 ring-[#FAAA48]/30 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
             <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#FAAA48] text-2xl">
               ⛪
             </div>
@@ -1007,7 +1007,7 @@ export default function CompanySite() {
           </div>
 
           {/* Other Well-Wishers */}
-          <div className="group rounded-2xl bg-[#2F0F03] p-6 text-[#FFDDAC] shadow-lg ring-1 ring-[#FAAA48]/20 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+          <div className="group rounded-2xl bg-[#FFDDAC] p-6 text-[#2F0F03] shadow-lg ring-1 ring-[#FAAA48]/30 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
             <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#FAAA48] text-2xl">
               ❤️
             </div>
@@ -1033,11 +1033,11 @@ export default function CompanySite() {
         </div>
       </Section>
 
-      <Stories id="stories" eyebrow="Real impact" title="Success Stories" tone="dark" people={SUCCESS_STORIES} />
+      <Stories id="stories" eyebrow="Real impact" title="Success Stories" tone="light" people={SUCCESS_STORIES} />
 
-      <Gallery id="gallery" eyebrow="A glimpse" title="Gallery" tone="light" images={GALLERY_IMAGES} />
+      <Gallery id="gallery" eyebrow="A glimpse" title="Gallery" tone="dark" images={GALLERY_IMAGES} />
 
-      <footer className="bg-[#2F0F03] px-4 py-12 text-[#FFDDAC] sm:px-6 md:px-16">
+      <footer className="bg-[#FFDDAC] px-4 py-12 text-[#2F0F03] sm:px-6 md:px-16">
         <div className="mx-auto max-w-3xl space-y-6 text-center">
           <div className="space-y-1">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FAAA48]">Get in touch</p>
