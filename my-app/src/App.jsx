@@ -636,7 +636,7 @@ export default function CompanySite() {
             onClick={() => scrollTo("home")}
             className="font-display shrink-0 truncate text-sm font-semibold text-[#FFDDAC] sm:text-base md:text-lg"
           >
-            St Benedict's Children Programme
+            St Benedict's Children Centre
           </button>
 
           <div className="flex items-center gap-4">
