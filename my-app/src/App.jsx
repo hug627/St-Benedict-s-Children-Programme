@@ -638,7 +638,7 @@ export default function CompanySite() {
             aria-label="St Benedict's Children Centre - Home"
           >
             <img
-              src="/logo.png"
+              src="/Logo.png"
               alt="St Benedict's Children Centre logo"
               className="h-12 w-12 object-contain sm:h-14 sm:w-14"
             />
