@@ -670,7 +670,7 @@ export default function CompanySite() {
               </button>
 
               {desktopMenuOpen && (
-                <div className="absolute right-0 top-full mt-3 w-52 overflow-hidden rounded-xl bg-[#2F0F03] shadow-xl ring-1 ring-[#FAAA48]/20">
+                <div className="absolute right-0 top-full z-50 mt-3 w-56 overflow-hidden rounded-xl bg-[#2F0F03] shadow-2xl ring-1 ring-[#FAAA48]/30">
                   {NAV_ITEMS.map((item) => (
                     <button
                       key={item.id}
@@ -678,7 +678,7 @@ export default function CompanySite() {
                         scrollTo(item.id);
                         setDesktopMenuOpen(false);
                       }}
-                      className="block w-full px-4 py-2.5 text-left text-sm font-medium text-[#2F0F03] transition-colors hover:bg-[#FAAA48]/10 hover:text-[#FAAA48]"
+                      className="block w-full px-4 py-2.5 text-left text-sm font-medium text-[#FFDDAC] transition-colors hover:bg-[#FAAA48] hover:text-[#2F0F03]"
                     >
                       {item.label}
                     </button>
@@ -959,7 +959,7 @@ export default function CompanySite() {
           {/* Kinder-Initiative Kenia (KIK) */}
           <div className="group rounded-2xl bg-[#FFDDAC] p-6 text-[#2F0F03] shadow-lg ring-1 ring-[#FAAA48]/30 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
             <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#FAAA48] text-2xl">
-              1
+              🇩🇪
             </div>
 
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#FAAA48]">
@@ -984,7 +984,7 @@ export default function CompanySite() {
           {/* St. Benedict's Parish */}
           <div className="group rounded-2xl bg-[#FFDDAC] p-6 text-[#2F0F03] shadow-lg ring-1 ring-[#FAAA48]/30 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
             <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#FAAA48] text-2xl">
-              2
+              ⛪
             </div>
 
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#FAAA48]">
@@ -1009,7 +1009,7 @@ export default function CompanySite() {
           {/* Other Well-Wishers */}
           <div className="group rounded-2xl bg-[#FFDDAC] p-6 text-[#2F0F03] shadow-lg ring-1 ring-[#FAAA48]/30 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
             <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#FAAA48] text-2xl">
-              3
+              ❤️
             </div>
 
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#FAAA48]">
