@@ -959,7 +959,7 @@ export default function CompanySite() {
           {/* Kinder-Initiative Kenia (KIK) */}
           <div className="group rounded-2xl bg-[#FFDDAC] p-6 text-[#2F0F03] shadow-lg ring-1 ring-[#FAAA48]/30 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
             <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#FAAA48] text-2xl">
-              🇩🇪
+              1
             </div>
 
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#FAAA48]">
@@ -984,7 +984,7 @@ export default function CompanySite() {
           {/* St. Benedict's Parish */}
           <div className="group rounded-2xl bg-[#FFDDAC] p-6 text-[#2F0F03] shadow-lg ring-1 ring-[#FAAA48]/30 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
             <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#FAAA48] text-2xl">
-              ⛪
+              2
             </div>
 
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#FAAA48]">
@@ -1009,7 +1009,7 @@ export default function CompanySite() {
           {/* Other Well-Wishers */}
           <div className="group rounded-2xl bg-[#FFDDAC] p-6 text-[#2F0F03] shadow-lg ring-1 ring-[#FAAA48]/30 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
             <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#FAAA48] text-2xl">
-              ❤️
+              3
             </div>
 
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#FAAA48]">
