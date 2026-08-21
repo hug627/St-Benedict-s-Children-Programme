@@ -26,7 +26,7 @@ const DONATION_INFO = {
   absaAccount: "0671410505",
 };
 
-const CONTACT_EMAIL = "st.benedict.c.p@gmail.com";
+const CONTACT_EMAIL = "parishbenedict@gmail.com";
 
 const NAV_ITEMS = [
   { id: "background", label: "Background" },
