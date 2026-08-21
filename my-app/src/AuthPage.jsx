@@ -24,11 +24,17 @@ function prefersReducedMotion() {
 export default function AuthPage() {
   const [tab, setTab] = useState("login"); // "login" | "signup"
   const [forgotMode, setForgotMode] = useState(false);
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  // Controls password visibility
+  const [showPassword, setShowPassword] = useState(false);
+
   const [message, setMessage] = useState({ text: "", type: "" });
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
   const { setLoggedInUser } = useAuth();
 
@@ -39,72 +45,137 @@ export default function AuthPage() {
 
   useGSAP(() => {
     if (prefersReducedMotion()) return;
-    gsap.from(cardRef.current, { opacity: 0, y: 24, scale: 0.97, duration: 0.6, ease: "power3.out" });
+
+    gsap.from(cardRef.current, {
+      opacity: 0,
+      y: 24,
+      scale: 0.97,
+      duration: 0.6,
+      ease: "power3.out",
+    });
   }, []);
 
   useGSAP(() => {
     if (!indicatorRef.current) return;
+
     const x = tab === "login" ? 0 : "100%";
+
     if (prefersReducedMotion()) {
       gsap.set(indicatorRef.current, { x });
       return;
     }
-    gsap.to(indicatorRef.current, { x, duration: 0.35, ease: "power2.out" });
+
+    gsap.to(indicatorRef.current, {
+      x,
+      duration: 0.35,
+      ease: "power2.out",
+    });
   }, [tab]);
 
   useGSAP(() => {
     if (!formRef.current || prefersReducedMotion()) return;
-    gsap.from(formRef.current.children, { opacity: 0, y: 12, duration: 0.4, stagger: 0.05, ease: "power2.out" });
+
+    gsap.from(formRef.current.children, {
+      opacity: 0,
+      y: 12,
+      duration: 0.4,
+      stagger: 0.05,
+      ease: "power2.out",
+    });
   }, [tab, forgotMode]);
 
   useGSAP(() => {
     if (!messageRef.current || !message.text) return;
+
     if (prefersReducedMotion()) {
-      gsap.set(messageRef.current, { opacity: 1, x: 0 });
+      gsap.set(messageRef.current, {
+        opacity: 1,
+        x: 0,
+      });
       return;
     }
+
     if (message.type === "error") {
-      gsap.fromTo(messageRef.current, { opacity: 0, x: -6 }, { opacity: 1, x: 0, duration: 0.4, ease: "elastic.out(1, 0.5)" });
+      gsap.fromTo(
+        messageRef.current,
+        { opacity: 0, x: -6 },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.4,
+          ease: "elastic.out(1, 0.5)",
+        }
+      );
     } else {
-      gsap.fromTo(messageRef.current, { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" });
+      gsap.fromTo(
+        messageRef.current,
+        { opacity: 0, y: 6 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+          ease: "power2.out",
+        }
+      );
     }
   }, [message]);
 
   // Helper: Every request includes credentials so the browser sends/receives cookies
   async function apiRequest(endpoint, body) {
-    // Ensures clean URL construction without double slashes or missing /api/auth
     const cleanBase = BASE_URL.replace(/\/$/, "");
     const url = `${cleanBase}/api/auth${endpoint}`;
 
     const res = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
       credentials: "include",
       body: JSON.stringify(body),
     });
 
     let data;
+
     try {
       data = await res.json();
     } catch {
-      throw new Error("Server error. Please check your network or try again.");
+      throw new Error(
+        "Server error. Please check your network or try again."
+      );
     }
 
-    if (!res.ok) throw new Error(data.message || "Something went wrong.");
+    if (!res.ok) {
+      throw new Error(data.message || "Something went wrong.");
+    }
+
     return data;
   }
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
     setLoading(true);
     setMessage({ text: "", type: "" });
+
     try {
-      const data = await apiRequest("/login", { email, password });
+      const data = await apiRequest("/login", {
+        email,
+        password,
+      });
+
       setLoggedInUser(data.user);
-      setMessage({ text: `Welcome back, ${data.user?.name || "User"}!`, type: "success" });
+
+      setMessage({
+        text: `Welcome back, ${data.user?.name || "User"}!`,
+        type: "success",
+      });
+
       setTimeout(() => navigate("/"), 600);
     } catch (err) {
-      setMessage({ text: err.message, type: "error" });
+      setMessage({
+        text: err.message,
+        type: "error",
+      });
     } finally {
       setLoading(false);
     }
@@ -112,15 +183,30 @@ export default function AuthPage() {
 
   const handleSignup = async (e) => {
     e.preventDefault();
+
     setLoading(true);
     setMessage({ text: "", type: "" });
+
     try {
-      const data = await apiRequest("/signup", { name, email, password });
+      const data = await apiRequest("/signup", {
+        name,
+        email,
+        password,
+      });
+
       setLoggedInUser(data.user);
-      setMessage({ text: "Account created! You're now logged in.", type: "success" });
+
+      setMessage({
+        text: "Account created! You're now logged in.",
+        type: "success",
+      });
+
       setTimeout(() => navigate("/"), 600);
     } catch (err) {
-      setMessage({ text: err.message, type: "error" });
+      setMessage({
+        text: err.message,
+        type: "error",
+      });
     } finally {
       setLoading(false);
     }
@@ -128,13 +214,24 @@ export default function AuthPage() {
 
   const handleForgotPassword = async (e) => {
     e.preventDefault();
+
     setLoading(true);
     setMessage({ text: "", type: "" });
+
     try {
-      const data = await apiRequest("/forgot-password", { email });
-      setMessage({ text: data.message || "Reset link sent!", type: "success" });
+      const data = await apiRequest("/forgot-password", {
+        email,
+      });
+
+      setMessage({
+        text: data.message || "Reset link sent!",
+        type: "success",
+      });
     } catch (err) {
-      setMessage({ text: err.message, type: "error" });
+      setMessage({
+        text: err.message,
+        type: "error",
+      });
     } finally {
       setLoading(false);
     }
@@ -144,6 +241,9 @@ export default function AuthPage() {
     setTab(next);
     setForgotMode(false);
     setMessage({ text: "", type: "" });
+
+    // Hide password whenever switching between Login and Sign Up
+    setShowPassword(false);
   };
 
   return (
@@ -167,23 +267,34 @@ export default function AuthPage() {
           onClick={() => navigate("/")}
           className="font-display mb-7 block w-full text-center text-lg font-semibold text-[#2F0F03] transition-opacity hover:opacity-70"
         >
-          St Benedict  Children's Programme 
+          St Benedict Children's Programme
         </button>
 
         <div className="relative mb-7 flex rounded-full bg-[#FAAA48]/20 p-1">
-          <div ref={indicatorRef} className="absolute inset-y-1 left-1 w-[calc(50%-4px)] rounded-full bg-[#2F0F03]" />
+          <div
+            ref={indicatorRef}
+            className="absolute inset-y-1 left-1 w-[calc(50%-4px)] rounded-full bg-[#2F0F03]"
+          />
+
           <button
+            type="button"
             onClick={() => switchTab("login")}
             className={`relative z-10 flex-1 rounded-full py-2 text-sm font-semibold transition-colors ${
-              tab === "login" ? "text-[#FFDDAC]" : "text-[#2F0F03]"
+              tab === "login"
+                ? "text-[#FFDDAC]"
+                : "text-[#2F0F03]"
             }`}
           >
             Log In
           </button>
+
           <button
+            type="button"
             onClick={() => switchTab("signup")}
             className={`relative z-10 flex-1 rounded-full py-2 text-sm font-semibold transition-colors ${
-              tab === "signup" ? "text-[#FFDDAC]" : "text-[#2F0F03]"
+              tab === "signup"
+                ? "text-[#FFDDAC]"
+                : "text-[#2F0F03]"
             }`}
           >
             Sign Up
@@ -191,12 +302,29 @@ export default function AuthPage() {
         </div>
 
         {forgotMode ? (
-          <form ref={formRef} onSubmit={handleForgotPassword} className="flex flex-col gap-4">
+          <form
+            ref={formRef}
+            onSubmit={handleForgotPassword}
+            className="flex flex-col gap-4"
+          >
             <p className="text-sm text-[#2F0F03]/70">
-              Enter your email and we'll send you a link to reset your password.
+              Enter your email and we'll send you a link to reset your
+              password.
             </p>
-            <Field label="Email" type="email" value={email} onChange={setEmail} autoComplete="email" required />
-            <SubmitButton loading={loading}>Send Reset Link</SubmitButton>
+
+            <Field
+              label="Email"
+              type="email"
+              value={email}
+              onChange={setEmail}
+              autoComplete="email"
+              required
+            />
+
+            <SubmitButton loading={loading}>
+              Send Reset Link
+            </SubmitButton>
+
             <button
               type="button"
               onClick={() => setForgotMode(false)}
@@ -206,8 +334,20 @@ export default function AuthPage() {
             </button>
           </form>
         ) : tab === "login" ? (
-          <form ref={formRef} onSubmit={handleLogin} className="flex flex-col gap-4">
-            <Field label="Email" type="email" value={email} onChange={setEmail} autoComplete="email" required />
+          <form
+            ref={formRef}
+            onSubmit={handleLogin}
+            className="flex flex-col gap-4"
+          >
+            <Field
+              label="Email"
+              type="email"
+              value={email}
+              onChange={setEmail}
+              autoComplete="email"
+              required
+            />
+
             <Field
               label="Password"
               type="password"
@@ -215,7 +355,10 @@ export default function AuthPage() {
               onChange={setPassword}
               autoComplete="current-password"
               required
+              showPassword={showPassword}
+              setShowPassword={setShowPassword}
             />
+
             <button
               type="button"
               onClick={() => setForgotMode(true)}
@@ -223,12 +366,35 @@ export default function AuthPage() {
             >
               Forgot password?
             </button>
-            <SubmitButton loading={loading}>Log In</SubmitButton>
+
+            <SubmitButton loading={loading}>
+              Log In
+            </SubmitButton>
           </form>
         ) : (
-          <form ref={formRef} onSubmit={handleSignup} className="flex flex-col gap-4">
-            <Field label="Full Name" type="text" value={name} onChange={setName} autoComplete="name" required />
-            <Field label="Email" type="email" value={email} onChange={setEmail} autoComplete="email" required />
+          <form
+            ref={formRef}
+            onSubmit={handleSignup}
+            className="flex flex-col gap-4"
+          >
+            <Field
+              label="Full Name"
+              type="text"
+              value={name}
+              onChange={setName}
+              autoComplete="name"
+              required
+            />
+
+            <Field
+              label="Email"
+              type="email"
+              value={email}
+              onChange={setEmail}
+              autoComplete="email"
+              required
+            />
+
             <Field
               label="Password"
               type="password"
@@ -237,8 +403,13 @@ export default function AuthPage() {
               autoComplete="new-password"
               minLength={6}
               required
+              showPassword={showPassword}
+              setShowPassword={setShowPassword}
             />
-            <SubmitButton loading={loading}>Create Account</SubmitButton>
+
+            <SubmitButton loading={loading}>
+              Create Account
+            </SubmitButton>
           </form>
         )}
 
@@ -246,7 +417,9 @@ export default function AuthPage() {
           <p
             ref={messageRef}
             className={`mt-4 text-center text-sm ${
-              message.type === "error" ? "font-medium text-red-700" : "font-medium text-[#2F0F03]"
+              message.type === "error"
+                ? "font-medium text-red-700"
+                : "font-medium text-[#2F0F03]"
             }`}
           >
             {message.text}
@@ -257,22 +430,97 @@ export default function AuthPage() {
   );
 }
 
-function Field({ label, type, value, onChange, required, minLength, autoComplete }) {
+
+// =====================================================
+// FIELD COMPONENT
+// =====================================================
+
+function Field({
+  label,
+  type,
+  value,
+  onChange,
+  required,
+  minLength,
+  autoComplete,
+  showPassword,
+  setShowPassword,
+}) {
+  const isPassword = type === "password";
+
   return (
     <label className="block text-sm font-medium text-[#2F0F03]/80">
       {label}
-      <input
-        type={type}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        required={required}
-        minLength={minLength}
-        autoComplete={autoComplete}
-        className="mt-1 w-full rounded-lg border border-[#2F0F03]/20 bg-white px-3 py-2.5 text-sm text-[#2F0F03] transition-shadow focus:outline-none focus:ring-2 focus:ring-[#FAAA48]"
-      />
+
+      <div className="relative mt-1">
+        <input
+          type={isPassword && showPassword ? "text" : type}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          required={required}
+          minLength={minLength}
+          autoComplete={autoComplete}
+          className={`w-full rounded-lg border border-[#2F0F03]/20 bg-white px-3 py-2.5 text-sm text-[#2F0F03] transition-shadow focus:outline-none focus:ring-2 focus:ring-[#FAAA48] ${
+            isPassword ? "pr-11" : ""
+          }`}
+        />
+
+        {isPassword && (
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center justify-center text-[#2F0F03]/60 transition-colors hover:text-[#2F0F03]"
+            aria-label={
+              showPassword ? "Hide password" : "Show password"
+            }
+            title={showPassword ? "Hide password" : "Show password"}
+          >
+            {showPassword ? (
+              // Eye OFF
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M3 3l18 18" />
+                <path d="M10.58 10.58a2 2 0 0 0 2.83 2.83" />
+                <path d="M9.88 4.24A9.77 9.77 0 0 1 12 4c5 0 9.27 3.11 11 8a18.5 18.5 0 0 1-3.16 5.19" />
+                <path d="M6.61 6.61A18.5 18.5 0 0 0 1 12c1.73 4.89 6 8 11 8a9.77 9.77 0 0 0 4.12-.88" />
+              </svg>
+            ) : (
+              // Eye ON
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M2.06 12.35a1 1 0 0 1 0-.7A10.94 10.94 0 0 1 12 5c4.48 0 8.27 2.69 9.94 6.65a1 1 0 0 1 0 .7A10.94 10.94 0 0 1 12 19c-4.48 0-8.27-2.69-9.94-6.65Z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            )}
+          </button>
+        )}
+      </div>
     </label>
   );
 }
+
+
+// =====================================================
+// SUBMIT BUTTON
+// =====================================================
 
 function SubmitButton({ children, loading }) {
   return (
